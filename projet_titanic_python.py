@@ -31,6 +31,12 @@ titanic_data['fare'].fillna(titanic_data['fare'].mean(), inplace=True)
 # 3. Imputer la nationalité (country) avec "Unknown"
 titanic_data['country'].fillna('Unknown', inplace=True)
 
+# Vérification des valeurs manquantes après imputation
+print(titanic_data.isnull().sum())
+
+# Affichage des premières lignes pour vérifier les changements
+print(titanic_data.head())
+
 # Importer les bibliothèques de visualisation
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -87,8 +93,4 @@ plt.ylabel('Âge')
 plt.show()
 
 
-# Vérification des valeurs manquantes après imputation
-print(titanic_data.isnull().sum())
 
-# Affichage des premières lignes pour vérifier les changements
-print(titanic_data.head())
