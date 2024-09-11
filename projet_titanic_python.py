@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 
 # Charger le fichier Titanic.csv
-file_path = 'data/titanic.csv'  # Remplace avec le chemin correct vers ton fichier
+file_path = 'data/titanic.csv'  
 titanic_data = pd.read_csv(file_path, sep=';')
 
 # Afficher les informations du dataset pour détecter les valeurs manquantes
