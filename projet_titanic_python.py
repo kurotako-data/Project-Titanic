@@ -24,16 +24,21 @@ print(data_types)
 # Suppression de la colonne "ticketno" (car elle est entièrement manquante)
 titanic_data.drop(columns=['ticketno'], inplace=True)
 
+#Les colonnes Nbr des frères et sœurs / conjoints à bord du Titanic et Nbr des parents / enfants à bord du Titanic ont 900 valeurs manquantes, 
+#ce qui est important. Ces colonnes ne sont pas essentielles pour notre analyse. 
+titanic_data.drop(columns=['Nbr des frères et sœurs / conjoints à bord du Titanic', 
+                           'Nbr des parents / enfants à bord du Titanic'], inplace=True)
+
 # Imputation des valeurs manquantes
 
 # 1. Imputer l'âge avec la médiane
-titanic_data['age'].fillna(titanic_data['age'].median(), inplace=True)
+titanic_data = titanic_data.assign(age=titanic_data['age'].fillna(titanic_data['age'].median()))
 
 # 2. Imputer le prix du billet (fare) avec la moyenne
-titanic_data['fare'].fillna(titanic_data['fare'].mean(), inplace=True)
+titanic_data = titanic_data.assign(fare=titanic_data['fare'].fillna(titanic_data['fare'].mean()))
 
 # 3. Imputer la nationalité (country) avec "Unknown"
-titanic_data['country'].fillna('Unknown', inplace=True)
+titanic_data = titanic_data.assign(country=titanic_data['country'].fillna('Unknown'))
 
 # Vérification des valeurs manquantes après imputation
 print(titanic_data.isnull().sum())
