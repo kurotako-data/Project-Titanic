@@ -29,6 +29,9 @@ titanic_data.drop(columns=['ticketno'], inplace=True)
 titanic_data.drop(columns=['Nbr des frères et sœurs / conjoints à bord du Titanic', 
                            'Nbr des parents / enfants à bord du Titanic'], inplace=True)
 
+# Convertir la colonne 'survived' en valeurs numériques
+titanic_data['survived'] = titanic_data['survived'].map({'yes': 1, 'no': 0})
+
 # Imputation des valeurs manquantes
 
 # 1. Imputer l'âge avec la médiane
