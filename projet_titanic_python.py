@@ -61,40 +61,42 @@ plt.xlabel('Âge')
 plt.ylabel('Nombre de passagers')
 plt.show()
 
-# 2. Diagramme en barres des sexes
+# 2. Diagramme en barres des sexes avec `hue`
 plt.figure(figsize=(6, 4))
-sns.countplot(data=titanic_data, x='gender', palette='Set2')
+sns.countplot(data=titanic_data, x='gender', hue='gender', palette='Set2', legend=False)
 plt.title('Répartition des passagers par sexe')
 plt.xlabel('Sexe')
 plt.ylabel('Nombre de passagers')
 plt.show()
 
-# 3. Diagramme en barres de la répartition par classe
-plt.figure(figsize=(6, 4))
-sns.countplot(data=titanic_data, x='class', palette='Set3')
+
+# 3. Diagramme en barres de la répartition par classe avec `hue`
+plt.figure(figsize=(12, 4))
+sns.countplot(data=titanic_data, x='class', hue='class', palette='Set3', legend=False)
 plt.title('Répartition des passagers par classe')
 plt.xlabel('Classe')
 plt.ylabel('Nombre de passagers')
 plt.show()
 
-# 4. Comparaison des taux de survie par sexe
+# 4. Comparaison des taux de survie par sexe avec `hue` et palette
 plt.figure(figsize=(6, 4))
-sns.barplot(data=titanic_data, x='gender', y='survived', palette='Set1')
+sns.barplot(data=titanic_data, x='gender', y='survived', hue='gender', palette='Set1', dodge=False, legend=False)
 plt.title('Taux de survie par sexe')
 plt.xlabel('Sexe')
 plt.ylabel('Taux de survie')
 plt.show()
 
-# 5. Comparaison des taux de survie par classe
-plt.figure(figsize=(6, 4))
-sns.barplot(data=titanic_data, x='class', y='survived', palette='Set1')
+
+# 5. Comparaison des taux de survie par classe avec `hue` et palette
+plt.figure(figsize=(12, 4))
+sns.barplot(data=titanic_data, x='class', y='survived', hue='class', palette='Set1', dodge=False, legend=False)
 plt.title('Taux de survie par classe')
 plt.xlabel('Classe')
 plt.ylabel('Taux de survie')
 plt.show()
 
 # 6. Boxplot de l'âge par classe et survie
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(12, 6))
 sns.boxplot(data=titanic_data, x='class', y='age', hue='survived', palette='Set2')
 plt.title('Distribution de l\'âge par classe et survie')
 plt.xlabel('Classe')
@@ -109,10 +111,14 @@ plt.xlabel('Sexe')
 plt.ylabel('Âge')
 plt.show()
 
-# Examiner la corrélation entre les variables numériques pour voir lesquelles pourraient avoir une relation avec la survie. Cela peut être utile pour la modélisation.
+# Examiner la corrélation entre les variables numériques pour voir lesquelles pourraient avoir une relation avec la survie.
+# Cela peut être utile pour la modélisation.
+
+# Sélectionner uniquement les colonnes numériques
+numeric_columns = titanic_data.select_dtypes(include=['float64', 'int64'])
 
 # Matrice de corrélation entre les variables numériques
-correlation_matrix = titanic_data.corr()
+correlation_matrix = numeric_columns.corr()
 
 # Visualisation de la matrice de corrélation avec une heatmap
 plt.figure(figsize=(10, 8))
@@ -147,7 +153,7 @@ plt.show()
 # Code pour explorer ces relations entre âge, classe, sexe et survie :
 
 # Boxplot de l'âge par classe et survie
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(12, 6))
 sns.boxplot(data=titanic_data, x='class', y='age', hue='survived', palette='Set2')
 plt.title('Distribution de l\'âge par classe et survie')
 plt.xlabel('Classe')
