@@ -4,6 +4,9 @@
 # Importation des bibliothèques nécessaires
 import pandas as pd
 import numpy as np
+# Importer les bibliothèques de visualisation
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Charger le fichier Titanic.csv
 file_path = 'data/titanic.csv'  
@@ -11,11 +14,12 @@ titanic_data = pd.read_csv(file_path, sep=';')
 
 # Afficher les informations du dataset pour détecter les valeurs manquantes
 missing_values = titanic_data.isnull().sum()
+print(missing_values)
 
 # Afficher les types de données pour vérifier si certaines colonnes nécessitent un formatage
 data_types = titanic_data.dtypes
+print(data_types)
 
-missing_values, data_types
 
 # Suppression de la colonne "ticketno" (car elle est entièrement manquante)
 titanic_data.drop(columns=['ticketno'], inplace=True)
@@ -37,12 +41,9 @@ print(titanic_data.isnull().sum())
 # Affichage des premières lignes pour vérifier les changements
 print(titanic_data.head())
 
-# Importer les bibliothèques de visualisation
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Configurer le style de visualisation
-sns.set(style="whitegrid")
+#sns.set(style="whitegrid")
 
 # 1. Histogramme de la distribution des âges
 plt.figure(figsize=(10, 6))
@@ -84,11 +85,19 @@ plt.xlabel('Classe')
 plt.ylabel('Taux de survie')
 plt.show()
 
-# 6. Boxplot de l'âge par survie
-plt.figure(figsize=(8, 6))
-sns.boxplot(data=titanic_data, x='survived', y='age', palette='coolwarm')
-plt.title('Âge des passagers par survie')
-plt.xlabel('Survécu (0 = Non, 1 = Oui)')
+# 6. Boxplot de l'âge par classe et survie
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=titanic_data, x='class', y='age', hue='survived', palette='Set2')
+plt.title('Distribution de l\'âge par classe et survie')
+plt.xlabel('Classe')
+plt.ylabel('Âge')
+plt.show()
+
+# 7. Boxplot de l'âge par sexe et survie
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=titanic_data, x='gender', y='age', hue='survived', palette='Set3')
+plt.title('Distribution de l\'âge par sexe et survie')
+plt.xlabel('Sexe')
 plt.ylabel('Âge')
 plt.show()
 
