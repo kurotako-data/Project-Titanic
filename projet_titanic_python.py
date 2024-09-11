@@ -92,5 +92,58 @@ plt.xlabel('Survécu (0 = Non, 1 = Oui)')
 plt.ylabel('Âge')
 plt.show()
 
+# Examiner la corrélation entre les variables numériques pour voir lesquelles pourraient avoir une relation avec la survie. Cela peut être utile pour la modélisation.
+
+# Matrice de corrélation entre les variables numériques
+correlation_matrix = titanic_data.corr()
+
+# Visualisation de la matrice de corrélation avec une heatmap
+plt.figure(figsize=(10, 8))
+sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", linewidths=0.5)
+plt.title('Matrice de corrélation des variables numériques')
+plt.show()
+
+# Analyse des variables catégorielles avec des variables comme le sexe, la classe, et la nationalité. 
+# afin de regarder comment ces variables affectent la survie de manière plus approfondie.
+# Code pour une heatmap croisée entre ces variables catégorielles et la survie :
+
+# Tableau croisé dynamique pour explorer la relation entre classe, sexe et survie
+pivot_table = pd.pivot_table(titanic_data, values='survived', index=['class'], columns=['gender'], aggfunc='mean')
+
+# Visualisation avec une heatmap
+plt.figure(figsize=(8, 6))
+sns.heatmap(pivot_table, annot=True, cmap="Blues", linewidths=0.5)
+plt.title('Taux de survie par sexe et classe')
+plt.show()
+
+#Hypothèses avancées pour la modélisation basées sur les visualisations faites :
+
+# Les femmes ont un taux de survie plus élevé que les hommes (surtout en première et deuxième classes).
+# Hypothèse : Le sexe est un facteur important de la survie.
+
+# Les passagers de première classe ont un taux de survie plus élevé que ceux des deuxième et troisième classes.
+# Hypothèse : La classe est corrélée positivement avec la survie.
+
+# Les jeunes passagers, en particulier les enfants, ont un taux de survie plus élevé.
+# Hypothèse : L'âge joue un rôle dans la probabilité de survie.
+
+# Code pour explorer ces relations entre âge, classe, sexe et survie :
+
+# Boxplot de l'âge par classe et survie
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=titanic_data, x='class', y='age', hue='survived', palette='Set2')
+plt.title('Distribution de l\'âge par classe et survie')
+plt.xlabel('Classe')
+plt.ylabel('Âge')
+plt.show()
+
+# Boxplot de l'âge par sexe et survie
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=titanic_data, x='gender', y='age', hue='survived', palette='Set3')
+plt.title('Distribution de l\'âge par sexe et survie')
+plt.xlabel('Sexe')
+plt.ylabel('Âge')
+plt.show()
+
 
 
