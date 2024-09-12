@@ -119,5 +119,5 @@ Ce projet illustre l'utilisation de l'analyse de données et de l'apprentissage 
 ## Comment utiliser
 Pour explorer ce projet :
 1. Cloner le dépôt :
-   ``bash
+    ```bash
    git clone https://github.com/ton-utilisateur/Project-Titanic.git
