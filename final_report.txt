@@ -1,0 +1,112 @@
+Rapport d'Analyse Exploratoire des Données - Projet Titanic
+
+I. Introduction :
+
+Ce rapport présente une analyse exploratoire des données issues du jeu de données du Titanic. L'objectif est de mettre en évidence les caractéristiques principales des passagers, ainsi que les relations entre certaines variables (comme le sexe, l'âge, la classe) et la survie. Ce rapport est structuré en plusieurs étapes : l'exploration des données, les visualisations et la formulation des hypothèses pour la modélisation future.
+
+II. Préparation des Données :
+
+Les données ont été pré-traitées comme suit :
+
+Gestion des valeurs manquantes : les valeurs manquantes ont été imputées pour les variables 'âge' (avec la médiane), 'fare' (avec la moyenne) et 'country' (avec 'Unknown').
+Suppression des colonnes non pertinentes pour l’analyse : 'ticketno', 'Nbr des frères et sœurs / conjoints à bord du Titanic' et 'Nbr des parents / enfants à bord du Titanic' en raison de trop de valeurs manquantes ou de faible pertinence pour l'analyse.
+Conversion des colonnes catégorielles en données numériques (par exemple, la colonne 'survived' a été convertie en 1 pour "yes" et 0 pour "no").
+
+III. Points Clés des Visualisations :
+
+Distribution des âges des passagers :
+
+Les passagers sont majoritairement jeunes, avec une concentration entre 20 et 40 ans.
+Répartition des passagers par sexe et classe :
+
+Il y a une majorité d’hommes par rapport aux femmes.
+La plupart des passagers sont en 3ème classe, suivis par les 2ème et 1ère classes.
+Taux de survie par sexe :
+
+Les femmes ont un taux de survie bien plus élevé (environ 70%).
+Le taux de survie des hommes est faible (~20%).
+Taux de survie par classe :
+
+Les passagers de 1ère classe ont le taux de survie le plus élevé (~65%).
+Le taux de survie diminue avec la classe : 2ème classe (~45%), 3ème classe (~25%).
+Corrélations entre variables :
+
+La matrice de corrélation montre que 'fare' (prix du billet) a une corrélation positive modérée avec la survie (~0.19).
+L'âge a une corrélation faible avec la survie, mais est plus pertinent lorsqu'il est analysé en fonction de la classe et du sexe.
+Boxplots de l’âge et de la survie :
+
+Les jeunes passagers (surtout en 3ème classe) ont des chances de survie plus faibles.
+Les passagers plus âgés de 1ère classe semblent avoir un taux de survie plus élevé.
+Heatmap des taux de survie par sexe et classe :
+
+Les femmes en 1ère classe ont presque toutes survécu (~97%).
+Les hommes en 3ème classe ont un très faible taux de survie (~15%).
+
+IV. Démarche pour la Modélisation :
+
+Après cette analyse visuelle, nous allons procéder à la modélisation. Les hypothèses principales à tester sont les suivantes :
+
+Le sexe est un facteur important de la survie.
+La classe est positivement corrélée avec la survie.
+L'âge joue un rôle significatif dans la probabilité de survie.
+Les prochaines étapes consisteront à appliquer plusieurs modèles de classification pour prédire la survie des passagers en fonction de ces caractéristiques, en utilisant des méthodes telles que la régression logistique, les forêts aléatoires et d'autres modèles d'apprentissage automatique.
+
+
+ENGLISH VERSION :
+
+Exploratory Data Analysis Report - Project Titanic
+
+I. Introduction:
+
+This report presents an exploratory analysis of data from the Titanic dataset. The aim is to highlight the main characteristics of the passengers, as well as the relationships between certain variables (such as gender, age, class) and survival. This report is structured in several stages: data exploration, visualisations and the formulation of hypotheses for future modelling.
+
+II. Data preparation :
+
+The data were pre-processed as follows:
+
+Missing values management: missing values were imputed for the variables ‘age’ (with the median), ‘fare’ (with the mean) and ‘country’ (with ‘Unknown’).
+Removal of columns not relevant to the analysis: ‘ticketno’, ‘No. of siblings/spouses on Titanic’ and ‘No. of parents/children on Titanic’ due to too many missing values or low relevance to the analysis.
+Conversion of categorical columns into numerical data (for example, the ‘survived’ column was converted into 1 for ‘yes’ and 0 for ‘no’).
+
+III. Key points of the visualisations :
+
+Passenger age distribution :
+
+Passengers are predominantly young, with a concentration between the ages of 20 and 40.
+Passenger distribution by gender and class:
+
+There is a majority of men compared to women.
+Most passengers are in 3rd class, followed by 2nd and 1st class.
+Survival rate by gender:
+
+Women have a much higher survival rate (around 70%).
+Men have a low survival rate (~20%).
+Survival rate by class:
+
+1st class passengers have the highest survival rate (~65%).
+Survival rate decreases with class: 2nd class (~45%), 3rd class (~25%).
+Correlations between variables :
+
+The correlation matrix shows that ‘fare’ (ticket price) has a moderate positive correlation with survival (~0.19).
+Age has a weak correlation with survival, but is more relevant when analysed by class and gender.
+Boxplots of age and survival :
+
+Younger passengers (especially in 3rd class) have lower chances of survival.
+Older 1st class passengers appear to have a higher survival rate.
+Heatmap of survival rates by gender and class:
+
+Women in 1st class almost all survived (~97%).
+Men in 3rd class have a very low survival rate (~15%).
+
+
+IV. Modelling approach :
+
+After this visual analysis, we will proceed with the modelling. The main hypotheses to be tested are as follows:
+
+Gender is an important factor in survival.
+Class is positively correlated with survival.
+Age plays a significant role in the probability of survival.
+The next steps will be to apply several classification models to predict passenger survival based on these characteristics, using methods such as logistic regression, random forests and other machine learning models.
+
+
+Translated with DeepL.com (free version)
