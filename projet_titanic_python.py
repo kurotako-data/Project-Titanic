@@ -687,4 +687,50 @@ plt.title('Comparaison des courbes ROC pour différents modèles')
 plt.show()
 
 
+#Interprétations
+
+#1. Régression Logistique (Logistic Regression)
+#Accuracy: 0.7557
+#AUC: 0.78
+#Interprétation:
+#La régression logistique a montré une précision de 75.57% avec un AUC de 0.78, indiquant que 
+#ce modèle est plutôt efficace pour séparer les survivants et les non-survivants.
+#Ce modèle a une précision de 81% pour prédire les non-survivants, mais une précision plus faible de 62% 
+#pour les survivants, indiquant des difficultés à identifier correctement les survivants.
+
+#2. Random Forest
+#Accuracy: 0.7760
+#AUC: 0.79
+#Interprétation:
+#La Random Forest a légèrement mieux performé que la régression logistique avec une précision de 77.60% 
+#et un AUC de 0.79.
+#Le modèle Random Forest est plus équilibré avec une meilleure précision (66%) et un rappel (61%) 
+#pour les survivants. Cela montre une meilleure capacité à identifier les survivants, 
+#bien que ce ne soit pas parfait.
+
+#3. XGBoost
+#Accuracy: 0.7624
+#AUC: 0.80
+#Interprétation:
+#XGBoost affiche une précision de 76.24% et un AUC de 0.80, surpassant les modèles précédents 
+#en termes de capacité à différencier les classes.
+#Ce modèle offre une bonne balance entre précision et rappel, avec une performance légèrement 
+#supérieure à la Random Forest dans l'ensemble. Il semble bien adapté pour ce type de problème, 
+#bien que le rappel pour les survivants (59%) reste légèrement inférieur à celui de la Random Forest.
+
+#4. Voting Classifier (Ensemble Model)
+
+#Accuracy: 0.7851
+#AUC: 0.80
+#Interprétation:
+#Le classificateur par vote a obtenu la meilleure précision (78.51%) avec un AUC de 0.80, ce qui en fait 
+#le meilleur modèle parmi ceux testés.
+#Il combine les avantages des différents modèles en votant de manière pondérée sur les probabilités des prédictions. Cela améliore les performances globales, en particulier pour prédire les survivants (précision de 68%).
+
+#Conclusion :
+#Le Voting Classifier a montré les meilleures performances globales avec un AUC de 0.80 et une précision de 78.51%. Il combine les forces des autres modèles tout en maintenant un bon compromis entre précision et rappel.
+#XGBoost est une excellente option individuelle avec un AUC de 0.80, tout juste derrière le classificateur 
+#par vote en termes de précision.
+#Random Forest a également montré des performances robustes et stables, avec une bonne capacité à prédire 
+#correctement les non-survivants et une bonne précision globale.
 
