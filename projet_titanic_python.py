@@ -363,69 +363,108 @@ print(report)
 
 #Analyse des résultats après optimisation des hyperparamètres
 
-#1. Régression Logistique Optimisée
-#Meilleurs paramètres :
-#C = 0.1
-#penalty = l2 (régularisation L2)
-#Performance :
-#Accuracy : 0.7715
+#Deux modèles (régression logistique et forêt aléatoire) 
+
+# 1 Modèle Optimisé : Régression Logistique
+
+# Meilleurs paramètres :
+#C = 1 : Ce paramètre de régularisation indique qu'une pénalité modérée est appliquée. 
+#Une valeur plus grande de `C` signifie moins de régularisation, 
+#et une valeur plus petite signifie plus de régularisation. 
+#Ici, la régularisation est modérée, ce qui est cohérent avec le compromis entre biais et variance.
+
+#Pénalité = l2 : L'utilisation de la régularisation `L2` (ridge) permet de réduire la magnitude des 
+#coefficients pour éviter l'overfitting, mais sans les mettre exactement à zéro (ce que ferait `L1`).
+
+# Performance du modèle :
+#Accuracy = 0.7579 (75.79%) : Le modèle a correctement prédit environ 76 % des cas, 
+#ce qui est relativement bon mais montre qu'il y a encore une marge d'amélioration.
+  
 #Matrice de confusion :
-#253 passagers correctement classés comme non-survivants (classe 0).
-#88 passagers correctement classés comme survivants (classe 1).
-#50 passagers survivants mal classés comme non-survivants.
-#Précision (classe 1) : 0.63 (63% des survivants prédits sont effectivement des survivants).
-#Rappel (classe 1) : 0.64 (64% des survivants sont correctement identifiés).
-#f1-score (classe 1) : 0.64 (compromis entre précision et rappel).
+#Classe 0 (Non-survivants) : 
+#252 passagers ont été correctement classés comme non-survivants (vrais négatifs).
+#52 passagers non-survivants ont été mal classés comme survivants (faux positifs).
+#Classe 1 (Survivants) : 
+#83 passagers survivants ont été correctement identifiés (vrais positifs).
+#55 passagers survivants ont été mal classés comme non-survivants (faux négatifs).
+  
+#Rapport de classification :
+#Précision (classe 1) = 0.61 : La précision signifie que 61 % des prédictions positives (survivants) 
+#sont effectivement correctes.
+#Rappel (classe 1) = 0.60 : Le rappel indique que 60 % des passagers réellement survivants ont été correctement 
+#identifiés.
+#f1-score (classe 1) = 0.61 : Le F1-score combine la précision et le rappel, et ici, 
+#il montre un équilibre modéré pour la classe des survivants.
 
-#Interprétation :
+#Interprétation générale :
+#La régression logistique fonctionne relativement bien pour détecter les non-survivants, mais elle a des 
+#difficultés à correctement prédire les survivants (classe 1). 
+#Cela est visible avec une précision et un rappel modérés pour la classe des survivants.
+#Ce modèle a tendance à sous-prévoir les survivants, ce qui est un problème commun lorsqu'on a un 
+#déséquilibre de classe, même si des techniques comme `SMOTE` ont été appliquées pour y remédier.
 
-#La régression logistique optimisée offre une meilleure gestion de la régularisation, avec 
-#des performances globales raisonnables.
-#L'accuracy de 77.15% est stable, mais la précision et le rappel sur les survivants sont encore 
-#faibles (autour de 0.63 et 0.64), indiquant que le modèle a du mal à bien détecter les survivants.
-#Toutefois, la performance générale reste équilibrée et adéquate compte tenu des limitations des données.
 
-#2. Random Forest Optimisée
-#Meilleurs paramètres :
-#max_depth = 30
-#min_samples_leaf = 1
-#min_samples_split = 5
-#n_estimators = 500
 
-#Performance :
-#Accuracy : 0.7602
+#2 Modèle Optimisé : Forêt Aléatoire (Random Forest)
+
+# Meilleurs paramètres :
+#max_depth = None : Cela signifie que les arbres peuvent croître jusqu'à ce que toutes les feuilles soient pures, 
+#ou qu'ils contiennent moins d'échantillons que le paramètre `min_samples_split`. 
+#Cela permet à chaque arbre de capter un maximum d'informations.
+#min_samples_split = 10 : Un nœud doit contenir au moins 10 échantillons avant de se diviser, 
+#ce qui limite la croissance excessive des arbres et aide à éviter l'overfitting.
+#min_samples_leaf = 1 : Chaque feuille (noeud terminal) doit contenir au moins 1 échantillon, 
+#ce qui permet aux arbres de se diviser plus en profondeur.
+#n_estimators = 200 : Le modèle utilise 200 arbres pour la prédiction, ce qui est une valeur assez standard, 
+#mais plus faible que dans certains modèles de Random Forest plus robustes.
+
+#Performance du modèle :
+#Accuracy = 0.7466 (74.66%) : La forêt aléatoire atteint environ 75 % d'accuracy, 
+#ce qui est légèrement inférieur à celui de la régression logistique.
+  
 #Matrice de confusion :
-#256 passagers correctement classés comme non-survivants (classe 0).
-#80 passagers correctement classés comme survivants (classe 1).
-#58 passagers survivants mal classés comme non-survivants.
-#Précision (classe 1) : 0.62
-#Rappel (classe 1) : 0.58
-#f1-score (classe 1) : 0.60
+#Classe 0 (Non-survivants) : 
+#245 passagers ont été correctement classés comme non-survivants (vrais négatifs).
+#59 passagers non-survivants ont été mal classés comme survivants (faux positifs).
+#Classe 1 (Survivants): 
+#85 passagers survivants ont été correctement identifiés (vrais positifs).
+#53 passagers survivants ont été mal classés comme non-survivants (faux négatifs).
+  
+#Rapport de classification :
+#Précision (classe 1) = 0.59 : La précision pour les survivants est légèrement plus faible que dans le modèle 
+#de régression logistique, ce qui signifie que 59 % des prédictions positives sont correctes.
+#Rappel (classe 1) = 0.62 : Le rappel est légèrement meilleur que dans la régression logistique, 
+#avec 62 % des survivants correctement identifiés.
+#f1-score (classe 1) = 0.60: Le F1-score est similaire à celui de la régression logistique, 
+#montrant un compromis modéré entre précision et rappel.
 
-#Interprétation :
+# Interprétation générale :
+#Random Forest montre des performances similaires à celles de la régression logistique en termes d'accuracy 
+#globale, mais il gère légèrement mieux le rappel pour les survivants (classe 1). 
+#Cela signifie que la forêt aléatoire est légèrement meilleure pour identifier les survivants, 
+#bien que la différence soit minime.
+#Problème récurrent: Comme pour la régression logistique, le modèle a du mal à correctement prédire 
+#la classe des survivants, avec une précision et un rappel encore faibles pour la classe 1.
 
-#Random Forest avec ses paramètres optimisés est légèrement moins performante que la régression logistique 
-#en termes d'accuracy (76% contre 77.15%).
-#Bien que la précision et le rappel pour les survivants (classe 1) restent proches (0.62 et 0.58), 
-#cela montre que le modèle a du mal à distinguer correctement les survivants.
-#La Random Forest gère mieux les passagers non-survivants, mais a des difficultés similaires à la 
-#régression logistique pour identifier les survivants.
 
-#Conclusion
-#Régression Logistique optimisée semble légèrement mieux performante que la Random Forest sur cet 
-#ensemble de données, avec un léger avantage en termes de précision et de rappel sur les survivants.
-#Malgré l'optimisation, les deux modèles présentent des difficultés à identifier correctement les 
-#survivants, ce qui est un défi commun avec des classes déséquilibrées comme c'est le cas ici.
 
-#Prochaine étape :
-#Rééquilibrer davantage les classes via d'autres techniques comme l'ajustement des poids de classe 
-#(ex: dans la régression logistique avec class_weight='balanced') ou l'essai d'autres méthodes 
-#d'oversampling ou undersampling.
-#Tester d'autres algorithmes comme Gradient Boosting ou XGBoost qui sont plus puissants pour les 
-#données complexes et pourraient mieux capter les relations entre variables.
+#Comparaison et Recommandations :
 
-#En fonction de ces observations, nous pourrions envisager des ajustements supplémentaires, 
-#ou explorer d'autres algorithmes comme mentionné.
+#Précision générale : Les deux modèles présentent des performances globales similaires en termes de précision, 
+#avec une légère avance pour la régression logistique.
+#Détection des survivants : Les deux modèles ont des difficultés à détecter correctement les survivants, 
+#bien que la forêt aléatoire ait un rappel légèrement meilleur pour cette classe.
+
+#Prochaines étapes :
+#Rééchantillonnage supplémentaire : Bien que `SMOTE` ait déjà été utilisé pour rééquilibrer les classes, 
+#1 il pourrait être utile de tester d'autres techniques, comme l'ajustement des poids de 
+#classe (`class_weight='balanced'`).
+#2 Ensembles plus robustes avec des modèles plus complexes comme XGBoost ou Gradient Boosting qui pourraient 
+#mieux capter les relations complexes entre les variables et améliorer les performances sur la classe 
+#des survivants.
+#3 Tuning d'hyperparamètres supplémentaire pour améliorer les performances globales, en particulier pour 
+#la détection des survivants.
+
 
 # Ajout du modèle Gradient Boosting 
 from sklearn.ensemble import GradientBoostingClassifier
@@ -499,18 +538,18 @@ plt.show()
 #Voici les points clés de ces résultats :
 
 #1. Gradient Boosting
-#Accuracy : 0.7805
-#Précision pour les survivants (classe 1) : 0.67
-#Rappel pour les survivants : 0.58
+#Accuracy : 0.7896
+#Précision pour les survivants (classe 1) : 0.70
+#Rappel pour les survivants : 0.57
 #AUC : 0.81
 #Le Gradient Boosting est bien équilibré, et avec son AUC de 0.81, 
 #il surpasse légèrement les autres modèles. 
 #Cependant, il est toujours un peu en difficulté pour bien prédire les survivants (classe 1), 
-#comme en témoigne le rappel à 0.58.
+#comme en témoigne le rappel à 0.57.
 
 #2. Régression Logistique
 #Accuracy : 0.7715
-#AUC : 0.79
+#AUC : 0.78
 #C'est un modèle assez fiable avec une bonne régularisation après optimisation, 
 #mais il reste moins performant que le Gradient Boosting en termes de détection des survivants.
 
@@ -530,5 +569,122 @@ plt.show()
 #Nous pourrions également examiner les contributions de chaque variable pour voir si certaines 
 #peuvent être ajustées ou si d'autres transformations sur les données pourraient 
 #améliorer la performance des modèles.
+
+# Importation des bibliothèques à nouveau
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split, RandomizedSearchCV, StratifiedKFold, cross_val_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+from xgboost import XGBClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, roc_curve, auc
+from sklearn.feature_selection import RFE
+from imblearn.over_sampling import SMOTE
+from sklearn.metrics import RocCurveDisplay
+
+# Préparation des données pour la modélisation
+X = titanic_data.drop(columns=['Num', 'survived'])
+y = titanic_data['survived']
+
+# Division des données en ensembles d'entraînement et de test
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+# Application de SMOTE pour rééquilibrer les classes
+smote = SMOTE(random_state=42)
+X_resampled, y_resampled = smote.fit_resample(X_train, y_train)
+
+# Standardisation des données
+scaler = StandardScaler()
+X_resampled_scaled = scaler.fit_transform(X_resampled)
+X_test_scaled = scaler.transform(X_test)
+
+# 1. Régression Logistique avec ajustement des poids de classe
+logreg = LogisticRegression(solver='lbfgs', max_iter=1000, class_weight='balanced', random_state=42)
+param_grid_logreg = {'C': [0.01, 0.1, 1, 10, 100], 'penalty': ['l2']}
+random_search_logreg = RandomizedSearchCV(logreg, param_distributions=param_grid_logreg, cv=5, scoring='accuracy', n_iter=5, random_state=42)
+random_search_logreg.fit(X_resampled_scaled, y_resampled)
+best_logreg = random_search_logreg.best_estimator_
+
+# 2. Random Forest avec RandomizedSearchCV et ajustement des poids de classe
+rf = RandomForestClassifier(class_weight='balanced', random_state=42)
+param_grid_rf = {'n_estimators': [100, 200, 500], 'max_depth': [None, 10, 20, 30], 'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4]}
+random_search_rf = RandomizedSearchCV(rf, param_distributions=param_grid_rf, cv=5, scoring='accuracy', n_iter=10, random_state=42)
+random_search_rf.fit(X_resampled_scaled, y_resampled)
+best_rf = random_search_rf.best_estimator_
+
+# 3. XGBoost
+xgb = XGBClassifier(random_state=42)
+param_grid_xgb = {'n_estimators': [100, 200, 500], 'learning_rate': [0.01, 0.1, 0.2], 'max_depth': [3, 5, 7]}
+random_search_xgb = RandomizedSearchCV(xgb, param_distributions=param_grid_xgb, cv=5, scoring='accuracy', n_iter=10, random_state=42)
+random_search_xgb.fit(X_resampled_scaled, y_resampled)
+best_xgb = random_search_xgb.best_estimator_
+
+# 4. KNN
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_resampled_scaled, y_resampled)
+
+# 5. Ensemble learning - Voting Classifier
+ensemble_model = VotingClassifier(estimators=[
+    ('logreg', best_logreg), 
+    ('rf', best_rf), 
+    ('xgb', best_xgb), 
+    ('knn', knn)
+], voting='soft')  # 'soft' pour utiliser les probabilités
+ensemble_model.fit(X_resampled_scaled, y_resampled)
+
+# 6. Validation croisée avec StratifiedKFold pour une meilleure évaluation
+skf = StratifiedKFold(n_splits=5)
+
+# Cross-validation pour le modèle de régression logistique
+cross_val_scores_logreg = cross_val_score(best_logreg, X_resampled_scaled, y_resampled, cv=skf)
+print(f'Logistic Regression CV accuracy: {np.mean(cross_val_scores_logreg):.4f}')
+
+# Cross-validation pour le modèle Random Forest
+cross_val_scores_rf = cross_val_score(best_rf, X_resampled_scaled, y_resampled, cv=skf)
+print(f'Random Forest CV accuracy: {np.mean(cross_val_scores_rf):.4f}')
+
+# Cross-validation pour le modèle XGBoost
+cross_val_scores_xgb = cross_val_score(best_xgb, X_resampled_scaled, y_resampled, cv=skf)
+print(f'XGBoost CV accuracy: {np.mean(cross_val_scores_xgb):.4f}')
+
+# Cross-validation pour le modèle de Voting Classifier
+cross_val_scores_ensemble = cross_val_score(ensemble_model, X_resampled_scaled, y_resampled, cv=skf)
+print(f'Voting Classifier CV accuracy: {np.mean(cross_val_scores_ensemble):.4f}')
+
+# 7. Evaluation sur le jeu de test pour tous les modèles
+models = {
+    'Logistic Regression': best_logreg,
+    'Random Forest': best_rf,
+    'XGBoost': best_xgb,
+    'Voting Classifier': ensemble_model
+}
+
+for name, model in models.items():
+    y_pred = model.predict(X_test_scaled)
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f'\nModèle: {name}')
+    print(f'Accuracy: {accuracy:.4f}')
+    print('Matrice de confusion:')
+    print(confusion_matrix(y_test, y_pred))
+    print('Rapport de classification:')
+    print(classification_report(y_test, y_pred))
+
+# 8. Courbes ROC et comparaison des AUC
+plt.figure(figsize=(10, 8))
+
+for name, model in models.items():
+    y_pred_proba = model.predict_proba(X_test_scaled)[:, 1]  # Probabilité pour la classe positive
+    fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
+    roc_auc = auc(fpr, tpr)
+    RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc, estimator_name=name).plot()
+
+plt.title('Comparaison des courbes ROC pour différents modèles')
+plt.show()
+
 
 
