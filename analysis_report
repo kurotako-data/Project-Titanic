@@ -5,6 +5,7 @@ Le naufrage du Titanic en 1912 est l'un des événements maritimes les plus trag
 Ce rapport présente une analyse complète des données disponibles, suivie d'une modélisation prédictive pour déterminer les facteurs ayant le plus influencé la survie des passagers.
 
 2. Exploration des données
+
 2.1 Description des variables
 Les données du Titanic contiennent des informations sur les passagers telles que leur nom, leur sexe, leur âge, leur classe, leur nationalité et leur ticket. Parmi les variables importantes, nous avons :
 
@@ -15,6 +16,7 @@ class : La classe du passager (1ère, 2e, 3e).
 fare : Le tarif payé pour le billet.
 country : Nationalité du passager.
 embarked : Port d'embarquement (S = Southampton, C = Cherbourg, Q = Queenstown).
+
 2.2 Visualisations exploratoires
 Pour mieux comprendre les données, voici quelques visualisations initiales :
 
@@ -33,79 +35,91 @@ Certaines colonnes contenaient des valeurs manquantes, notamment la colonne "age
 Imputer la médiane pour l'âge.
 Imputer la moyenne pour le prix du billet (fare).
 Imputer la nationalité inconnue par "Unknown".
-3.2 Encodage des variables catégorielles
-Les variables telles que "gender", "class", "country" et "embarked" ont été converties en variables numériques à l'aide d'un encodage "one-hot", ce qui nous permet d'utiliser ces variables dans nos modèles de machine learning.
 
-3.3 Normalisation
-Certaines variables, comme l'âge et le prix du billet, ont été normalisées (centrées et réduites) pour les modèles tels que la régression logistique et le SVM, qui sont sensibles aux échelles des données.
 
-4. Modélisation initiale
-4.1 Séparation des données
+2.3 Visualisations principales
+
+Répartition des âges des passagers : La distribution montre que la majorité des passagers avaient entre 20 et 40 ans.
+Répartition par sexe : Les hommes représentaient une majorité des passagers.
+
+Taux de survie par sexe et par classe :
+Les femmes avaient un taux de survie plus élevé que les hommes.
+Les passagers de première classe avaient plus de chances de survivre que ceux des classes inférieures.
+
+2.4 Conclusion de l'exploration
+Les premiers résultats montrent que le sexe, la classe du billet et l'âge sont des facteurs clés influençant les chances de survie des passagers.
+
+
+3 Préparation des données
+Imputation des valeurs manquantes et transformation des variables
+Standardisation : Les colonnes numériques age et fare ont été standardisées pour avoir une échelle comparable.
+Encodage des variables catégorielles : Les colonnes comme gender, class, country ont été encodées en variables numériques par un encodage one-hot.
+Rééquilibrage des classes avec SMOTE : Étant donné que la classe survived était déséquilibrée, la méthode SMOTE a été utilisée pour rééquilibrer les classes.
+
+3.1 Séparation des données
 Nous avons séparé les données en deux ensembles : 80% des données pour l'entraînement et 20% pour le test. Cela permet d'entraîner les modèles sur une partie des données tout en conservant un ensemble pour évaluer la performance des modèles sur des données non vues.
 
-4.2 Modèles testés
+3.2 Modèles testés
 Nous avons testé plusieurs modèles de machine learning pour prédire la survie des passagers :
 
+3.3 Modélisation
+Modèles testés
 Régression Logistique
-Ce modèle, simple mais efficace, est particulièrement adapté pour les problèmes de classification binaire. Il permet également de visualiser l'importance relative des features via les coefficients associés.
+Random Forest
+XGBoost
+Voting Classifier (Ensemble) : Un modèle combinant les prédictions de la régression logistique, Random Forest, XGBoost, et K-Nearest Neighbors (KNN).
+Validation croisée et sélection des hyperparamètres
+Les modèles ont été optimisés via RandomizedSearchCV pour sélectionner les meilleurs hyperparamètres. La validation croisée à 5 plis (StratifiedKFold) a été utilisée pour évaluer la robustesse des modèles.
 
-Résultats initiaux :
+Métriques d'évaluation
+Accuracy : La proportion des prédictions correctes.
+Matrice de confusion : Pour visualiser les prédictions correctes et incorrectes par classe.
+Rapport de classification : Précision, rappel et F1-score pour chaque classe.
+Courbe ROC et AUC : Mesure de la capacité du modèle à discriminer entre les survivants et non-survivants.
 
-Accuracy : 77.8%
-Précision pour les survivants : 68%
-F1-score : 0.61 (pour la classe des survivants)
-Forêt Aléatoire (Random Forest)
-Ce modèle robuste utilise plusieurs arbres de décision pour améliorer la précision de la prédiction. Il est efficace pour capturer les relations non linéaires entre les variables.
+4. Résultats
+Comparaison des modèles
+Modèle	              Accuracy	Précision (Survivants)	Rappel (Survivants)	AUC
+Régression Logistique	0.7557	    0.62	                    0.60	        0.78
+Random Forest	        0.7760	    0.66	                    0.61	        0.79
+XGBoost	              0.7624	    0.64	                    0.59	        0.80
+Voting Classifier	    0.7851	    0.68	                    0.63	        0.80
 
-Résultats initiaux :
+Analyse des résultats
 
-Accuracy : 79.4%
-Précision pour les survivants : 72%
-F1-score : 0.63 (pour la classe des survivants)
-SVM (Support Vector Machine)
-Ce modèle utilise un hyperplan pour séparer les classes. Il est efficace pour des jeux de données de petite dimension, mais peut être coûteux en calcul.
+Régression Logistique :
 
-Résultats initiaux :
+Le modèle a une bonne performance globale (75.57% d'accuracy), mais il sous-prédit les survivants (classe 1), avec une précision de 62%.
+L'AUC de 0.78 indique une bonne capacité de séparation entre les classes.
 
-Accuracy : 75.3%
-Précision pour les survivants : 60%
-F1-score : 0.61 (pour la classe des survivants)
-K-Nearest Neighbors (KNN)
-Le modèle KNN classe les individus en fonction de leurs voisins les plus proches. Ce modèle est intuitif, mais peut être moins performant pour des données complexes.
+Random Forest :
 
-Résultats initiaux :
+Ce modèle montre une meilleure capacité à identifier les survivants que la régression logistique, avec un rappel de 61%.
+L'AUC est de 0.79, ce qui montre qu'il est légèrement supérieur à la régression logistique.
 
-Accuracy : 73.5%
-Précision pour les survivants : 57%
-F1-score : 0.60 (pour la classe des survivants)
-4.3 Visualisations des résultats initiaux
-Nous avons visualisé les matrices de confusion de chaque modèle pour mieux comprendre les erreurs de classification. Par exemple, la matrice de confusion pour la régression logistique montrait que le modèle avait tendance à classer correctement les non-survivants, mais avait plus de mal à identifier les survivants.
+XGBoost :
 
-5. Optimisation des modèles
-5.1 Ajustement des hyperparamètres
-À l'aide de la méthode GridSearchCV, nous avons optimisé les hyperparamètres de la régression logistique et de la forêt aléatoire.
+XGBoost affiche des performances similaires à Random Forest en termes d'accuracy (76.24%) et d'AUC (0.80).
+Il semble bien équilibré entre précision et rappel.
 
-Régression Logistique : Nous avons optimisé le paramètre de régularisation (C) et la pénalité.
-Meilleurs paramètres : {'C': 0.1, 'penalty': 'l2'}
-Accuracy : 77.15%
+Voting Classifier :
 
-Forêt Aléatoire : Nous avons ajusté la profondeur des arbres et le nombre d'estimateurs.
-Meilleurs paramètres : {'max_depth': 30, 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 500}
-Accuracy : 76.02%
+Le classificateur par vote a les meilleures performances globales avec une accuracy de 78.51% et un AUC de 0.80.
+Il combine efficacement les avantages des autres modèles pour offrir une prédiction plus robuste.
 
-5.2 Visualisation des performances optimisées
-Régression Logistique : L'optimisation a légèrement amélioré la précision des prédictions pour les survivants (précision de 63% et recall de 64%).
-Forêt Aléatoire : L'optimisation a permis de stabiliser les résultats, mais n'a pas apporté de grande amélioration par rapport au modèle initial.
-6. Conclusion et recommandations
-6.1 Synthèse des résultats
-Après avoir testé plusieurs modèles et ajusté leurs hyperparamètres, la régression logistique et la forêt aléatoire se sont révélées être les modèles les plus performants. Toutefois, aucun modèle n'a atteint une précision exceptionnelle pour la prédiction des survivants, en raison du déséquilibre des classes dans les données.
+Courbes ROC pour les différents modèles
+Une comparaison des courbes ROC montre que le Voting Classifier et XGBoost ont les meilleurs AUC (0.80), indiquant une meilleure capacité à discriminer les classes.
 
-6.2 Prochaines étapes
-Pour améliorer encore les résultats, voici quelques pistes :
+5. Conclusion et recommandations
+Résumé des résultats
+Le Voting Classifier a montré les meilleures performances globales, avec une précision de 78.51% et un AUC de 0.80. Il combine les forces des autres modèles tout en maintenant un bon équilibre entre précision et rappel pour la classe des survivants. XGBoost, en tant que modèle individuel, s'est également bien comporté avec un AUC similaire.
 
-Utiliser des techniques d'équilibrage plus avancées pour les classes, comme l'augmentation des données ou l'application de méthodes d'échantillonnage plus sophistiquées.
-Explorer des modèles plus complexes tels que le XGBoost ou le Gradient Boosting, qui pourraient capturer des interactions plus fines entre les variables.
+Recommandations
+Ensembles plus robustes : Envisager d'autres modèles d'ensemble comme le Gradient Boosting ou des versions améliorées de XGBoost pour améliorer encore la détection des survivants.
+Tuning d'hyperparamètres supplémentaires : Ajuster davantage les hyperparamètres des modèles, en particulier pour XGBoost et Random Forest, pourrait permettre d'améliorer la performance.
+Analyse approfondie des caractéristiques : Il serait intéressant d'examiner l'importance des variables (feature importance) pour mieux comprendre les facteurs les plus influents dans la prédiction.
 Enrichir les données : inclure d'autres variables qui pourraient être pertinentes pour la survie (par exemple, les informations sur les cabines ou les relations familiales).
-6.3 Considérations éthiques
+
+6 Considérations éthiques
 Il est important de noter que certains modèles ont pu être biaisés par des facteurs tels que le sexe ou la classe sociale, ce qui reflète les normes sociales de l'époque plutôt que des critères purement techniques.
 
