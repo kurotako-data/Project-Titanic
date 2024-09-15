@@ -427,4 +427,108 @@ print(report)
 #En fonction de ces observations, nous pourrions envisager des ajustements supplémentaires, 
 #ou explorer d'autres algorithmes comme mentionné.
 
+# Ajout du modèle Gradient Boosting 
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.metrics import roc_curve, auc, RocCurveDisplay
+
+# Initialisation du modèle Gradient Boosting
+gbc = GradientBoostingClassifier(random_state=42)
+
+# Entraînement du modèle sur les données rééchantillonnées et normalisées
+gbc.fit(X_resampled_scaled, y_resampled)
+
+# Prédiction sur l'ensemble de test
+y_pred_gbc = gbc.predict(X_test_scaled)
+
+# Évaluation du modèle Gradient Boosting
+accuracy_gbc = accuracy_score(y_test, y_pred_gbc)
+confusion_gbc = confusion_matrix(y_test, y_pred_gbc)
+report_gbc = classification_report(y_test, y_pred_gbc)
+
+print("\nModèle: Gradient Boosting")
+print(f"Accuracy: {accuracy_gbc:.4f}")
+print("Matrice de confusion:")
+print(confusion_gbc)
+print("Rapport de classification:")
+print(report_gbc)
+
+# Visualisation de la courbe ROC pour Gradient Boosting
+y_pred_proba_gbc = gbc.predict_proba(X_test_scaled)[:, 1]  # Probabilité pour la classe positive
+fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba_gbc)
+roc_auc = auc(fpr, tpr)
+
+# Affichage de la courbe ROC
+plt.figure(figsize=(8, 6))
+RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc, estimator_name='Gradient Boosting').plot()
+plt.title('Courbe ROC - Gradient Boosting')
+plt.show()
+
+print(f"AUC du modèle Gradient Boosting: {roc_auc:.4f}")
+
+# Comparaison des courbes ROC pour plusieurs modèles
+plt.figure(figsize=(10, 8))
+
+# Courbe ROC pour la régression logistique
+y_pred_proba_logreg = best_logreg.predict_proba(X_test_scaled)[:, 1]  # Probabilité pour la classe positive
+fpr_logreg, tpr_logreg, _ = roc_curve(y_test, y_pred_proba_logreg)
+roc_auc_logreg = auc(fpr_logreg, tpr_logreg)
+RocCurveDisplay(fpr=fpr_logreg, tpr=tpr_logreg, roc_auc=roc_auc_logreg, estimator_name='Régression Logistique').plot()
+
+# Courbe ROC pour Random Forest
+y_pred_proba_rf = best_rf.predict_proba(X_test)[:, 1]  # Probabilité pour la classe positive
+fpr_rf, tpr_rf, _ = roc_curve(y_test, y_pred_proba_rf)
+roc_auc_rf = auc(fpr_rf, tpr_rf)
+RocCurveDisplay(fpr=fpr_rf, tpr=tpr_rf, roc_auc=roc_auc_rf, estimator_name='Random Forest').plot()
+
+# Courbe ROC pour Gradient Boosting
+y_pred_proba_gbc = gbc.predict_proba(X_test_scaled)[:, 1]  # Probabilité pour la classe positive
+fpr_gbc, tpr_gbc, _ = roc_curve(y_test, y_pred_proba_gbc)
+roc_auc_gbc = auc(fpr_gbc, tpr_gbc)
+RocCurveDisplay(fpr=fpr_gbc, tpr=tpr_gbc, roc_auc=roc_auc_gbc, estimator_name='Gradient Boosting').plot()
+
+# Afficher le graphique final
+plt.title('Comparaison des courbes ROC pour différents modèles')
+plt.show()
+
+#Les résultats montrent que le modèle de Gradient Boosting est l'un des plus performants dans cette phase, 
+#avec un AUC de 0.81, ce qui en fait le modèle qui discrimine le mieux entre les 
+#classes (survivants et non-survivants). 
+#Comparé à la régression logistique et à la random forest, qui ont respectivement des 
+#AUC de 0.79 et 0.78, il présente un léger avantage.
+
+#Voici les points clés de ces résultats :
+
+#1. Gradient Boosting
+#Accuracy : 0.7805
+#Précision pour les survivants (classe 1) : 0.67
+#Rappel pour les survivants : 0.58
+#AUC : 0.81
+#Le Gradient Boosting est bien équilibré, et avec son AUC de 0.81, 
+#il surpasse légèrement les autres modèles. 
+#Cependant, il est toujours un peu en difficulté pour bien prédire les survivants (classe 1), 
+#comme en témoigne le rappel à 0.58.
+
+#2. Régression Logistique
+#Accuracy : 0.7715
+#AUC : 0.79
+#C'est un modèle assez fiable avec une bonne régularisation après optimisation, 
+#mais il reste moins performant que le Gradient Boosting en termes de détection des survivants.
+
+#3. Random Forest
+#Accuracy : 0.7602
+#AUC : 0.78
+#La random forest est un peu en dessous des autres modèles en termes d'AUC, 
+#bien qu'elle soit robuste et performante globalement, en particulier pour prédire les non-survivants.
+
+#Analyse finale :
+#Le Gradient Boosting semble offrir un léger avantage par rapport aux autres modèles, 
+#principalement en raison de sa meilleure capacité à équilibrer entre précision et rappel 
+#pour la classe des survivants. Cependant, il est toujours possible d'améliorer la détection 
+#des survivants en ajustant encore les hyperparamètres ou en essayant des approches d'échantillonnage 
+#supplémentaires, comme l'ajustement des poids de classe.
+
+#Nous pourrions également examiner les contributions de chaque variable pour voir si certaines 
+#peuvent être ajustées ou si d'autres transformations sur les données pourraient 
+#améliorer la performance des modèles.
+
 
