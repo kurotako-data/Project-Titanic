@@ -168,5 +168,263 @@ plt.xlabel('Sexe')
 plt.ylabel('Âge')
 plt.show()
 
+#Première étape : Préparation des données
+#Voici ce que nous allons faire pour cette phase de préparation des données :
+
+#Standardisation des données numériques : Certaines colonnes, comme l'âge et le prix du billet (fare), 
+#peuvent avoir des échelles différentes. Nous allons les normaliser afin que toutes les données #
+#numériques aient une échelle comparable. Cela est particulièrement utile pour certains modèles comme KNN ou SVM.
+
+#Transformation des variables catégorielles :
+
+#Variables comme le genre et la classe doivent être encodées en variables numériques via one-hot encoding.
+#La nationalité (variable country) doit également être encodée afin que l'on puisse inclure 
+#cette dimension dans nos modèles.
+
+#Gestion des variables redondantes ou non pertinentes :
+
+#Nous avons déjà supprimé certaines colonnes non pertinentes comme ticketno et d'autres variables ayant 
+#beaucoup de valeurs manquantes.
+#Nous allons vérifier que toutes les autres variables sont prêtes pour la modélisation.
+
+# Importer les bibliothèques nécessaires
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+import pandas as pd
+
+# 1. Standardisation des données numériques (âge, prix du billet)
+scaler = StandardScaler()
+titanic_data[['age', 'fare']] = scaler.fit_transform(titanic_data[['age', 'fare']])
+
+# 2. Transformation des variables catégorielles (one-hot encoding)
+titanic_data = pd.get_dummies(titanic_data, columns=['gender', 'class', 'embarked', 'country'], drop_first=True)
+
+# 3. Vérification des données après transformation
+print(titanic_data.head())
+
+# Séparation des caractéristiques (features) et de la variable cible (target)
+X = titanic_data.drop(columns=['survived'])  # Features (variables explicatives)
+y = titanic_data['survived']  # Cible (variable à prédire)
+
+# Vérification de la forme des données
+print(X.shape, y.shape)
+
+# 4. Séparation des données d'entraînement et de test (80% entraînement, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Vérification de la séparation
+print(f'Taille du set d\'entraînement : {X_train.shape[0]} exemples')
+print(f'Taille du set de test : {X_test.shape[0]} exemples')
+
+#Étape 2 : Création et entraînement des modèles de machine learning
+#Pour cette étape, voici les actions prévues :
+
+#Modèles à tester :
+
+#Régression logistique
+#Forêt aléatoire (Random Forest)
+#Support Vector Machine (SVM)
+#K-Nearest Neighbors (KNN)
+
+#Évaluation des performances :
+
+#Accuracy (précision) : La proportion des prédictions correctes.
+#Matrice de confusion : Pour voir les prédictions correctes et incorrectes par classe.
+#F1-Score : Une métrique plus équilibrée entre précision et rappel, utile si les classes sont déséquilibrées.
+#Validation croisée : Nous allons également utiliser la validation croisée pour obtenir une meilleure estimation des performances du modèle.
+
+# Importer les bibliothèques nécessaires
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from imblearn.over_sampling import SMOTE
+from sklearn.preprocessing import StandardScaler
+
+
+# Fonction pour évaluer les modèles
+def evaluate_model(model, X_train, y_train, X_test, y_test):
+    # Entraînement du modèle
+    model.fit(X_train, y_train)
+    
+    # Prédictions
+    y_pred = model.predict(X_test)
+    
+    # Accuracy
+    accuracy = accuracy_score(y_test, y_pred)
+    
+    # Matrice de confusion
+    confusion = confusion_matrix(y_test, y_pred)
+    
+    # Rapport de classification
+    report = classification_report(y_test, y_pred)
+    
+    return accuracy, confusion, report
+
+# Étape 1 : Prétraitement des données
+# Séparer les features et la cible
+# Suppression de la colonne 'Num' qui est non pertinente
+X = titanic_data.drop(columns=['Num', 'survived'])
+y = titanic_data['survived']
+
+# Diviser les données en jeu d'entraînement et de test
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Appliquer SMOTE pour rééquilibrer les classes
+smote = SMOTE(random_state=42)
+X_resampled, y_resampled = smote.fit_resample(X_train, y_train)
+
+# Standardisation des données (centrer et réduire)
+scaler = StandardScaler()
+X_resampled_scaled = scaler.fit_transform(X_resampled)
+X_test_scaled = scaler.transform(X_test)
+
+# Étape 2 : Création et évaluation des modèles de machine learning
+
+# Importer les bibliothèques nécessaires
+from sklearn.model_selection import GridSearchCV
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from imblearn.over_sampling import SMOTE
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+# Rééchantillonnage avec SMOTE pour rééquilibrer les classes
+smote = SMOTE(random_state=42)
+X_resampled, y_resampled = smote.fit_resample(X_train, y_train)
+
+# Standardisation des données (centrer et réduire)
+scaler = StandardScaler()
+X_resampled_scaled = scaler.fit_transform(X_resampled)
+X_test_scaled = scaler.transform(X_test)
+
+# Fonction pour évaluer les modèles
+def evaluate_model(model, X_train, y_train, X_test, y_test):
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+
+    # Accuracy
+    accuracy = accuracy_score(y_test, y_pred)
+
+    # Matrice de confusion
+    confusion = confusion_matrix(y_test, y_pred)
+
+    # Rapport de classification
+    report = classification_report(y_test, y_pred)
+
+    return accuracy, confusion, report
+
+# Grid Search pour la Régression Logistique
+logreg = LogisticRegression(solver='lbfgs', max_iter=1000, random_state=42)
+param_grid_logreg = {
+    'C': [0.01, 0.1, 1, 10, 100],  # Paramètre de régularisation
+    'penalty': ['l2'],  # Régularisation l2
+}
+grid_search_logreg = GridSearchCV(logreg, param_grid_logreg, cv=5, scoring='accuracy')
+grid_search_logreg.fit(X_resampled_scaled, y_resampled)
+
+# Meilleurs hyperparamètres et évaluation
+best_logreg = grid_search_logreg.best_estimator_
+print(f"Meilleurs paramètres Régression Logistique: {grid_search_logreg.best_params_}")
+
+accuracy, confusion, report = evaluate_model(best_logreg, X_resampled_scaled, y_resampled, X_test_scaled, y_test)
+print("\nModèle optimisé: Régression Logistique")
+print(f"Accuracy: {accuracy:.4f}")
+print("Matrice de confusion:")
+print(confusion)
+print("Rapport de classification:")
+print(report)
+
+
+# Grid Search pour Random Forest
+rf = RandomForestClassifier(random_state=42)
+param_grid_rf = {
+    'n_estimators': [100, 200, 500],  # Nombre d'arbres
+    'max_depth': [None, 10, 20, 30],  # Profondeur maximale
+    'min_samples_split': [2, 5, 10],  # Minimum d'échantillons pour diviser un noeud
+    'min_samples_leaf': [1, 2, 4],    # Minimum d'échantillons dans chaque feuille
+}
+grid_search_rf = GridSearchCV(rf, param_grid_rf, cv=5, scoring='accuracy')
+grid_search_rf.fit(X_resampled, y_resampled)
+
+# Meilleurs hyperparamètres et évaluation
+best_rf = grid_search_rf.best_estimator_
+print(f"\nMeilleurs paramètres Random Forest: {grid_search_rf.best_params_}")
+
+accuracy, confusion, report = evaluate_model(best_rf, X_resampled, y_resampled, X_test, y_test)
+print("\nModèle optimisé: Random Forest")
+print(f"Accuracy: {accuracy:.4f}")
+print("Matrice de confusion:")
+print(confusion)
+print("Rapport de classification:")
+print(report)
+
+#Analyse des résultats après optimisation des hyperparamètres
+
+#1. Régression Logistique Optimisée
+#Meilleurs paramètres :
+#C = 0.1
+#penalty = l2 (régularisation L2)
+#Performance :
+#Accuracy : 0.7715
+#Matrice de confusion :
+#253 passagers correctement classés comme non-survivants (classe 0).
+#88 passagers correctement classés comme survivants (classe 1).
+#50 passagers survivants mal classés comme non-survivants.
+#Précision (classe 1) : 0.63 (63% des survivants prédits sont effectivement des survivants).
+#Rappel (classe 1) : 0.64 (64% des survivants sont correctement identifiés).
+#f1-score (classe 1) : 0.64 (compromis entre précision et rappel).
+
+#Interprétation :
+
+#La régression logistique optimisée offre une meilleure gestion de la régularisation, avec 
+#des performances globales raisonnables.
+#L'accuracy de 77.15% est stable, mais la précision et le rappel sur les survivants sont encore 
+#faibles (autour de 0.63 et 0.64), indiquant que le modèle a du mal à bien détecter les survivants.
+#Toutefois, la performance générale reste équilibrée et adéquate compte tenu des limitations des données.
+
+#2. Random Forest Optimisée
+#Meilleurs paramètres :
+#max_depth = 30
+#min_samples_leaf = 1
+#min_samples_split = 5
+#n_estimators = 500
+
+#Performance :
+#Accuracy : 0.7602
+#Matrice de confusion :
+#256 passagers correctement classés comme non-survivants (classe 0).
+#80 passagers correctement classés comme survivants (classe 1).
+#58 passagers survivants mal classés comme non-survivants.
+#Précision (classe 1) : 0.62
+#Rappel (classe 1) : 0.58
+#f1-score (classe 1) : 0.60
+
+#Interprétation :
+
+#Random Forest avec ses paramètres optimisés est légèrement moins performante que la régression logistique 
+#en termes d'accuracy (76% contre 77.15%).
+#Bien que la précision et le rappel pour les survivants (classe 1) restent proches (0.62 et 0.58), 
+#cela montre que le modèle a du mal à distinguer correctement les survivants.
+#La Random Forest gère mieux les passagers non-survivants, mais a des difficultés similaires à la 
+#régression logistique pour identifier les survivants.
+
+#Conclusion
+#Régression Logistique optimisée semble légèrement mieux performante que la Random Forest sur cet 
+#ensemble de données, avec un léger avantage en termes de précision et de rappel sur les survivants.
+#Malgré l'optimisation, les deux modèles présentent des difficultés à identifier correctement les 
+#survivants, ce qui est un défi commun avec des classes déséquilibrées comme c'est le cas ici.
+
+#Prochaine étape :
+#Rééquilibrer davantage les classes via d'autres techniques comme l'ajustement des poids de classe 
+#(ex: dans la régression logistique avec class_weight='balanced') ou l'essai d'autres méthodes 
+#d'oversampling ou undersampling.
+#Tester d'autres algorithmes comme Gradient Boosting ou XGBoost qui sont plus puissants pour les 
+#données complexes et pourraient mieux capter les relations entre variables.
+
+#En fonction de ces observations, nous pourrions envisager des ajustements supplémentaires, 
+#ou explorer d'autres algorithmes comme mentionné.
 
 
