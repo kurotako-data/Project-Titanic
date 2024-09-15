@@ -1,0 +1,111 @@
+Rapport d'analyse - Projet Titanic
+1. Introduction
+Le naufrage du Titanic en 1912 est l'un des événements maritimes les plus tragiques de l'histoire, causant la mort de plus de 1500 personnes. L'analyse de ces données historiques permet d'examiner les facteurs qui ont pu influencer la probabilité de survie des passagers.
+
+Ce rapport présente une analyse complète des données disponibles, suivie d'une modélisation prédictive pour déterminer les facteurs ayant le plus influencé la survie des passagers.
+
+2. Exploration des données
+2.1 Description des variables
+Les données du Titanic contiennent des informations sur les passagers telles que leur nom, leur sexe, leur âge, leur classe, leur nationalité et leur ticket. Parmi les variables importantes, nous avons :
+
+survived : Indique si un passager a survécu ou non (0 = non, 1 = oui).
+gender : Sexe du passager.
+age : Âge du passager.
+class : La classe du passager (1ère, 2e, 3e).
+fare : Le tarif payé pour le billet.
+country : Nationalité du passager.
+embarked : Port d'embarquement (S = Southampton, C = Cherbourg, Q = Queenstown).
+2.2 Visualisations exploratoires
+Pour mieux comprendre les données, voici quelques visualisations initiales :
+
+Distribution des âges des passagers : Cette visualisation permet de comprendre la répartition des âges parmi les passagers. En général, il y avait une majorité d'adultes jeunes (entre 20 et 40 ans) à bord.
+
+Répartition des passagers par sexe : La majorité des passagers étaient des hommes, ce qui influencera peut-être notre modélisation.
+
+Répartition des passagers par classe : La plupart des passagers appartenaient à la troisième classe, suivie par la deuxième et la première classe.
+
+Graphiques supplémentaires :
+Taux de survie par sexe et par classe : Cette visualisation montre que les femmes, particulièrement en première classe, avaient un taux de survie beaucoup plus élevé que les hommes.
+3. Préparation des données
+3.1 Gestion des valeurs manquantes
+Certaines colonnes contenaient des valeurs manquantes, notamment la colonne "age" et "fare". Nous avons procédé à :
+
+Imputer la médiane pour l'âge.
+Imputer la moyenne pour le prix du billet (fare).
+Imputer la nationalité inconnue par "Unknown".
+3.2 Encodage des variables catégorielles
+Les variables telles que "gender", "class", "country" et "embarked" ont été converties en variables numériques à l'aide d'un encodage "one-hot", ce qui nous permet d'utiliser ces variables dans nos modèles de machine learning.
+
+3.3 Normalisation
+Certaines variables, comme l'âge et le prix du billet, ont été normalisées (centrées et réduites) pour les modèles tels que la régression logistique et le SVM, qui sont sensibles aux échelles des données.
+
+4. Modélisation initiale
+4.1 Séparation des données
+Nous avons séparé les données en deux ensembles : 80% des données pour l'entraînement et 20% pour le test. Cela permet d'entraîner les modèles sur une partie des données tout en conservant un ensemble pour évaluer la performance des modèles sur des données non vues.
+
+4.2 Modèles testés
+Nous avons testé plusieurs modèles de machine learning pour prédire la survie des passagers :
+
+Régression Logistique
+Ce modèle, simple mais efficace, est particulièrement adapté pour les problèmes de classification binaire. Il permet également de visualiser l'importance relative des features via les coefficients associés.
+
+Résultats initiaux :
+
+Accuracy : 77.8%
+Précision pour les survivants : 68%
+F1-score : 0.61 (pour la classe des survivants)
+Forêt Aléatoire (Random Forest)
+Ce modèle robuste utilise plusieurs arbres de décision pour améliorer la précision de la prédiction. Il est efficace pour capturer les relations non linéaires entre les variables.
+
+Résultats initiaux :
+
+Accuracy : 79.4%
+Précision pour les survivants : 72%
+F1-score : 0.63 (pour la classe des survivants)
+SVM (Support Vector Machine)
+Ce modèle utilise un hyperplan pour séparer les classes. Il est efficace pour des jeux de données de petite dimension, mais peut être coûteux en calcul.
+
+Résultats initiaux :
+
+Accuracy : 75.3%
+Précision pour les survivants : 60%
+F1-score : 0.61 (pour la classe des survivants)
+K-Nearest Neighbors (KNN)
+Le modèle KNN classe les individus en fonction de leurs voisins les plus proches. Ce modèle est intuitif, mais peut être moins performant pour des données complexes.
+
+Résultats initiaux :
+
+Accuracy : 73.5%
+Précision pour les survivants : 57%
+F1-score : 0.60 (pour la classe des survivants)
+4.3 Visualisations des résultats initiaux
+Nous avons visualisé les matrices de confusion de chaque modèle pour mieux comprendre les erreurs de classification. Par exemple, la matrice de confusion pour la régression logistique montrait que le modèle avait tendance à classer correctement les non-survivants, mais avait plus de mal à identifier les survivants.
+
+5. Optimisation des modèles
+5.1 Ajustement des hyperparamètres
+À l'aide de la méthode GridSearchCV, nous avons optimisé les hyperparamètres de la régression logistique et de la forêt aléatoire.
+
+Régression Logistique : Nous avons optimisé le paramètre de régularisation (C) et la pénalité.
+Meilleurs paramètres : {'C': 0.1, 'penalty': 'l2'}
+Accuracy : 77.15%
+
+Forêt Aléatoire : Nous avons ajusté la profondeur des arbres et le nombre d'estimateurs.
+Meilleurs paramètres : {'max_depth': 30, 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 500}
+Accuracy : 76.02%
+
+5.2 Visualisation des performances optimisées
+Régression Logistique : L'optimisation a légèrement amélioré la précision des prédictions pour les survivants (précision de 63% et recall de 64%).
+Forêt Aléatoire : L'optimisation a permis de stabiliser les résultats, mais n'a pas apporté de grande amélioration par rapport au modèle initial.
+6. Conclusion et recommandations
+6.1 Synthèse des résultats
+Après avoir testé plusieurs modèles et ajusté leurs hyperparamètres, la régression logistique et la forêt aléatoire se sont révélées être les modèles les plus performants. Toutefois, aucun modèle n'a atteint une précision exceptionnelle pour la prédiction des survivants, en raison du déséquilibre des classes dans les données.
+
+6.2 Prochaines étapes
+Pour améliorer encore les résultats, voici quelques pistes :
+
+Utiliser des techniques d'équilibrage plus avancées pour les classes, comme l'augmentation des données ou l'application de méthodes d'échantillonnage plus sophistiquées.
+Explorer des modèles plus complexes tels que le XGBoost ou le Gradient Boosting, qui pourraient capturer des interactions plus fines entre les variables.
+Enrichir les données : inclure d'autres variables qui pourraient être pertinentes pour la survie (par exemple, les informations sur les cabines ou les relations familiales).
+6.3 Considérations éthiques
+Il est important de noter que certains modèles ont pu être biaisés par des facteurs tels que le sexe ou la classe sociale, ce qui reflète les normes sociales de l'époque plutôt que des critères purement techniques.
+
