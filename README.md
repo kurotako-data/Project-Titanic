@@ -50,7 +50,7 @@ By analyzing the data, we found that:
 Future improvements to this project may include:
 1. Incorporating more advanced machine learning models like **XGBoost** and **Gradient Boosting** to improve prediction accuracy.
 2. Investigating the impact of more nuanced features like family size, relationships between passengers, and fare per person.
-3. Deploying the predictive model using a web interface (e.g., **Streamlit** or **Flask**) to make the model interactive for users.
+3. Deploying the predictive model using a web interface to make the model interactive for users.
 
 ## Conclusion
 This project showcases the use of data analysis and machine learning to explore survival patterns in the Titanic disaster. The combination of nationality, class, and gender provides a unique perspective on survival rates, adding depth to the analysis of this historical event.
@@ -111,7 +111,7 @@ L'analyse des données nous a permis de constater que :
 Les améliorations futures de ce projet pourraient inclure
 1. Incorporer des modèles d'apprentissage automatique plus avancés tels que **XGBoost** et **Gradient Boosting** afin d'améliorer la précision des prédictions.
 2. Étudier l'impact de caractéristiques plus nuancées telles que la taille de la famille, les relations entre les passagers et le tarif par personne.
-3. Déployer le modèle prédictif à l'aide d'une interface web (par exemple **Streamlit** ou **Flask**) pour rendre le modèle interactif pour les utilisateurs.
+3. Déployer le modèle prédictif à l'aide d'une interface web pour rendre le modèle interactif pour les utilisateurs.
 
 ## Conclusion
 Ce projet illustre l'utilisation de l'analyse de données et de l'apprentissage automatique pour explorer les modèles de survie dans la catastrophe du Titanic. La combinaison de la nationalité, de la classe et du sexe fournit une perspective unique sur les taux de survie, ajoutant de la profondeur à l'analyse de cet événement historique.
