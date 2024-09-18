@@ -4,12 +4,11 @@
 # Importation des bibliothèques nécessaires
 import pandas as pd
 import numpy as np
-# Importer les bibliothèques de visualisation
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Charger le fichier Titanic.csv
-file_path = 'data/titanic.csv'  
+file_path = '/Users/Patrice/Documents/GitHub/Project-Titanic/data/titanic.csv' 
 titanic_data = pd.read_csv(file_path, sep=';')
 
 # Afficher les informations du dataset pour détecter les valeurs manquantes
@@ -20,28 +19,18 @@ print(missing_values)
 data_types = titanic_data.dtypes
 print(data_types)
 
-
-# Suppression de la colonne "ticketno" (car elle est entièrement manquante)
-titanic_data.drop(columns=['ticketno'], inplace=True)
-
 #Les colonnes Nbr des frères et sœurs / conjoints à bord du Titanic et Nbr des parents / enfants à bord du Titanic ont 900 valeurs manquantes, 
-#ce qui est important. Ces colonnes ne sont pas essentielles pour notre analyse. 
-titanic_data.drop(columns=['Nbr des frères et sœurs / conjoints à bord du Titanic', 
-                           'Nbr des parents / enfants à bord du Titanic'], inplace=True)
+#ce qui est important.Tout comme la colonne ticketno. Ces colonnes ne sont pas essentielles pour notre analyse. 
+
+titanic_data.drop(columns=['ticketno', 'Nbr des frères et sœurs / conjoints à bord du Titanic', 'Nbr des parents / enfants à bord du Titanic'], inplace=True)
 
 # Convertir la colonne 'survived' en valeurs numériques
 titanic_data['survived'] = titanic_data['survived'].map({'yes': 1, 'no': 0})
 
 # Imputation des valeurs manquantes
-
-# 1. Imputer l'âge avec la médiane
-titanic_data = titanic_data.assign(age=titanic_data['age'].fillna(titanic_data['age'].median()))
-
-# 2. Imputer le prix du billet (fare) avec la moyenne
-titanic_data = titanic_data.assign(fare=titanic_data['fare'].fillna(titanic_data['fare'].mean()))
-
-# 3. Imputer la nationalité (country) avec "Unknown"
-titanic_data = titanic_data.assign(country=titanic_data['country'].fillna('Unknown'))
+titanic_data['age'].fillna(titanic_data['age'].median(), inplace=True)
+titanic_data['fare'].fillna(titanic_data['fare'].mean(), inplace=True)
+titanic_data['country'].fillna('Unknown', inplace=True)
 
 # Vérification des valeurs manquantes après imputation
 print(titanic_data.isnull().sum())
@@ -49,9 +38,7 @@ print(titanic_data.isnull().sum())
 # Affichage des premières lignes pour vérifier les changements
 print(titanic_data.head())
 
-
-# Configurer le style de visualisation
-#sns.set(style="whitegrid")
+# Analyse exploratoire des données (EDA)
 
 # 1. Histogramme de la distribution des âges
 plt.figure(figsize=(10, 6))
@@ -61,35 +48,33 @@ plt.xlabel('Âge')
 plt.ylabel('Nombre de passagers')
 plt.show()
 
-# 2. Diagramme en barres des sexes avec `hue`
+# 2. Diagramme en barres des sexes
 plt.figure(figsize=(6, 4))
-sns.countplot(data=titanic_data, x='gender', hue='gender', palette='Set2', legend=False)
+sns.countplot(data=titanic_data, x='gender', hue='gender', palette='Set2')
 plt.title('Répartition des passagers par sexe')
 plt.xlabel('Sexe')
 plt.ylabel('Nombre de passagers')
 plt.show()
 
-
-# 3. Diagramme en barres de la répartition par classe avec `hue`
+# 3. Diagramme en barres de la répartition par classe
 plt.figure(figsize=(12, 4))
-sns.countplot(data=titanic_data, x='class', hue='class', palette='Set3', legend=False)
+sns.countplot(data=titanic_data, x='class', hue='class', palette='Set3')
 plt.title('Répartition des passagers par classe')
 plt.xlabel('Classe')
 plt.ylabel('Nombre de passagers')
 plt.show()
 
-# 4. Comparaison des taux de survie par sexe avec `hue` et palette
+# 4. Comparaison des taux de survie par sexe
 plt.figure(figsize=(6, 4))
-sns.barplot(data=titanic_data, x='gender', y='survived', hue='gender', palette='Set1', dodge=False, legend=False)
+sns.barplot(data=titanic_data, x='gender', y='survived', hue='gender', palette='Set1', dodge=False)
 plt.title('Taux de survie par sexe')
 plt.xlabel('Sexe')
 plt.ylabel('Taux de survie')
 plt.show()
 
-
-# 5. Comparaison des taux de survie par classe avec `hue` et palette
+# 5. Comparaison des taux de survie par classe
 plt.figure(figsize=(12, 4))
-sns.barplot(data=titanic_data, x='class', y='survived', hue='class', palette='Set1', dodge=False, legend=False)
+sns.barplot(data=titanic_data, x='class', y='survived', hue='class', palette='Set1', dodge=False)
 plt.title('Taux de survie par classe')
 plt.xlabel('Classe')
 plt.ylabel('Taux de survie')
@@ -111,13 +96,8 @@ plt.xlabel('Sexe')
 plt.ylabel('Âge')
 plt.show()
 
-# Examiner la corrélation entre les variables numériques pour voir lesquelles pourraient avoir une relation avec la survie.
-# Cela peut être utile pour la modélisation.
-
-# Sélectionner uniquement les colonnes numériques
+# Examiner la corrélation entre les variables numériques
 numeric_columns = titanic_data.select_dtypes(include=['float64', 'int64'])
-
-# Matrice de corrélation entre les variables numériques
 correlation_matrix = numeric_columns.corr()
 
 # Visualisation de la matrice de corrélation avec une heatmap
@@ -126,46 +106,49 @@ sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", linewidths=0.5)
 plt.title('Matrice de corrélation des variables numériques')
 plt.show()
 
-# Analyse des variables catégorielles avec des variables comme le sexe, la classe, et la nationalité. 
-# afin de regarder comment ces variables affectent la survie de manière plus approfondie.
-# Code pour une heatmap croisée entre ces variables catégorielles et la survie :
+# 8. Analyse de la nationalité
+# Comparaison des taux de survie par nationalité
+plt.figure(figsize=(12, 8))
+survived_by_country = titanic_data.groupby('country')['survived'].mean().sort_values(ascending=False)
+sns.barplot(x=survived_by_country.index, y=survived_by_country.values, hue=survived_by_country.index, palette='coolwarm')
+plt.xticks(rotation=90)
+plt.title('Taux de survie par nationalité')
+plt.xlabel('Nationalité')
+plt.ylabel('Taux de survie')
+plt.show()
 
-# Tableau croisé dynamique pour explorer la relation entre classe, sexe et survie
+# 9. Analyse croisée entre classe, sexe et survie avec heatmap
 pivot_table = pd.pivot_table(titanic_data, values='survived', index=['class'], columns=['gender'], aggfunc='mean')
 
-# Visualisation avec une heatmap
 plt.figure(figsize=(8, 6))
 sns.heatmap(pivot_table, annot=True, cmap="Blues", linewidths=0.5)
 plt.title('Taux de survie par sexe et classe')
 plt.show()
 
-#Hypothèses avancées pour la modélisation basées sur les visualisations faites :
+# 10. Analyse croisée entre nationalité et classe de billet avec heatmap
+pivot_country_class = pd.pivot_table(titanic_data, values='survived', index=['country'], columns=['class'], aggfunc='mean')
 
-# Les femmes ont un taux de survie plus élevé que les hommes (surtout en première et deuxième classes).
-# Hypothèse : Le sexe est un facteur important de la survie.
-
-# Les passagers de première classe ont un taux de survie plus élevé que ceux des deuxième et troisième classes.
-# Hypothèse : La classe est corrélée positivement avec la survie.
-
-# Les jeunes passagers, en particulier les enfants, ont un taux de survie plus élevé.
-# Hypothèse : L'âge joue un rôle dans la probabilité de survie.
-
-# Code pour explorer ces relations entre âge, classe, sexe et survie :
-
-# Boxplot de l'âge par classe et survie
-plt.figure(figsize=(12, 6))
-sns.boxplot(data=titanic_data, x='class', y='age', hue='survived', palette='Set2')
-plt.title('Distribution de l\'âge par classe et survie')
-plt.xlabel('Classe')
-plt.ylabel('Âge')
+plt.figure(figsize=(10, 8))
+sns.heatmap(pivot_country_class, annot=True, cmap="Reds", linewidths=0.5)
+plt.title('Taux de survie par nationalité et classe')
+plt.xticks(rotation=45)
 plt.show()
 
-# Boxplot de l'âge par sexe et survie
-plt.figure(figsize=(10, 6))
-sns.boxplot(data=titanic_data, x='gender', y='age', hue='survived', palette='Set3')
-plt.title('Distribution de l\'âge par sexe et survie')
-plt.xlabel('Sexe')
-plt.ylabel('Âge')
+# 11. Diagramme en barres pour examiner la répartition des nationalités
+plt.figure(figsize=(32, 10))
+sns.countplot(data=titanic_data, x='country', hue='country', palette='Set2')
+plt.title('Répartition des passagers par nationalité')
+plt.xlabel('Nationalité')
+plt.ylabel('Nombre de passagers')
+plt.xticks(rotation=45)
+plt.show()
+
+# 12. Heatmap pour visualiser le taux de survie par nationalité et sexe
+pivot_table_country_gender = pd.pivot_table(titanic_data, values='survived', index='country', columns='gender', aggfunc='mean')
+
+plt.figure(figsize=(10, 8))
+sns.heatmap(pivot_table_country_gender, annot=True, cmap='Blues', linewidths=0.5)
+plt.title('Taux de survie par nationalité et sexe')
 plt.show()
 
 #Première étape : Préparation des données
