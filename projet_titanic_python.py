@@ -125,30 +125,36 @@ sns.heatmap(pivot_table, annot=True, cmap="Blues", linewidths=0.5)
 plt.title('Taux de survie par sexe et classe')
 plt.show()
 
-# 10. Analyse croisée entre nationalité et classe de billet avec heatmap
-pivot_country_class = pd.pivot_table(titanic_data, values='survived', index=['country'], columns=['class'], aggfunc='mean')
+# 10. Heatmap pour visualiser le taux de survie par nationalité et classe (nationalités avec au moins 10 passagers)
+country_class_data = titanic_data.groupby(['country', 'class'])['survived'].mean().unstack()
+filtered_countries = titanic_data['country'].value_counts()[titanic_data['country'].value_counts() >= 10].index
+filtered_heatmap_data = country_class_data.loc[filtered_countries]
 
-plt.figure(figsize=(10, 8))
-sns.heatmap(pivot_country_class, annot=True, cmap="Reds", linewidths=0.5)
-plt.title('Taux de survie par nationalité et classe')
+plt.figure(figsize=(10, 6))
+sns.heatmap(filtered_heatmap_data, annot=True, cmap="Reds", linewidths=0.5)
+plt.title('Taux de survie par nationalité et classe (Top nationalités)')
 plt.xticks(rotation=45)
 plt.show()
 
-# 11. Diagramme en barres pour examiner la répartition des nationalités
-plt.figure(figsize=(32, 10))
-sns.countplot(data=titanic_data, x='country', hue='country', palette='Set2')
-plt.title('Répartition des passagers par nationalité')
+# 11. Diagramme en barres pour la répartition des 10 nationalités les plus fréquentes
+top_countries = titanic_data['country'].value_counts().nlargest(10).index  # Les 10 nationalités les plus représentées
+filtered_data = titanic_data[titanic_data['country'].isin(top_countries)]
+
+plt.figure(figsize=(12, 6))
+sns.countplot(data=filtered_data, x='country', hue='country', palette='Set2', order=top_countries)
+plt.title('Répartition des passagers par nationalité (Top 10)')
 plt.xlabel('Nationalité')
 plt.ylabel('Nombre de passagers')
 plt.xticks(rotation=45)
 plt.show()
 
-# 12. Heatmap pour visualiser le taux de survie par nationalité et sexe
-pivot_table_country_gender = pd.pivot_table(titanic_data, values='survived', index='country', columns='gender', aggfunc='mean')
+# 12. Heatmap pour visualiser le taux de survie par nationalité et sexe (nationalités avec au moins 10 passagers)
+pivot_table_country_gender = titanic_data.pivot_table(values='survived', index='country', columns='gender', aggfunc='mean')
+filtered_country_gender = pivot_table_country_gender.loc[filtered_countries]
 
-plt.figure(figsize=(10, 8))
-sns.heatmap(pivot_table_country_gender, annot=True, cmap='Blues', linewidths=0.5)
-plt.title('Taux de survie par nationalité et sexe')
+plt.figure(figsize=(10, 6))
+sns.heatmap(filtered_country_gender, annot=True, cmap='Blues', linewidths=0.5)
+plt.title('Taux de survie par nationalité et sexe (Top nationalités)')
 plt.show()
 
 #Première étape : Préparation des données
