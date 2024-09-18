@@ -283,3 +283,52 @@ for name, model in models.items():
 plt.title('Comparaison des courbes ROC pour différents modèles')
 plt.show()
 
+# Insights complémentaires
+
+# Entraînement de Random Forest avec RandomizedSearchCV
+rf = RandomForestClassifier(random_state=42)
+param_grid_rf = {
+    'n_estimators': [100, 200, 500],  # Nombre d'arbres
+    'max_depth': [None, 10, 20, 30],  # Profondeur maximale
+    'min_samples_split': [2, 5, 10],  # Minimum d'échantillons pour diviser un noeud
+    'min_samples_leaf': [1, 2, 4]     # Minimum d'échantillons dans chaque feuille
+}
+
+# Utilisation de RandomizedSearchCV pour trouver les meilleurs hyperparamètres
+random_search_rf = RandomizedSearchCV(rf, param_distributions=param_grid_rf, cv=5, scoring='accuracy', random_state=42)
+random_search_rf.fit(X_resampled_scaled, y_resampled)
+
+# Stocker le meilleur modèle trouvé
+best_rf = random_search_rf.best_estimator_
+
+# Vérifier les paramètres optimaux
+print(f'Meilleurs paramètres Random Forest: {random_search_rf.best_params_}')
+
+# Une fois best_rf bien défini, on peut extraire l'importance des variables
+importances = best_rf.feature_importances_
+feature_names = X.columns
+feature_importances = pd.Series(importances, index=feature_names).sort_values(ascending=False)
+
+# Affichage des 10 variables les plus importantes
+print(feature_importances.head(10))
+
+# Visualisation
+plt.figure(figsize=(10, 6))
+sns.barplot(x=feature_importances[:10], y=feature_importances.index[:10])
+plt.title('Importance des 10 principales variables selon Random Forest')
+plt.xlabel('Importance')
+plt.ylabel('Variables')
+plt.show()
+
+# Test de Chi-carré pour l'indépendance entre nationalité et survie
+contingency_table = pd.crosstab(titanic_data['country'], titanic_data['survived'])
+chi2, p, dof, ex = chi2_contingency(contingency_table)
+print(f"Chi2 statistic pour la nationalité: {chi2}, p-value: {p}")
+
+# Test de Chi-carré pour l'indépendance entre classe et survie
+contingency_table_class = pd.crosstab(titanic_data['class'], titanic_data['survived'])
+chi2_class, p_class, dof_class, ex_class = chi2_contingency(contingency_table_class)
+print(f"Chi2 statistic pour la classe: {chi2_class}, p-value: {p_class}")
+
+
+
