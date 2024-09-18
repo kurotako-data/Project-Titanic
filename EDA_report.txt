@@ -1,112 +1,198 @@
 Rapport d'Analyse Exploratoire des Données - Projet Titanic
 
-I. Introduction :
+Introduction :
 
 Ce rapport présente une analyse exploratoire des données issues du jeu de données du Titanic. L'objectif est de mettre en évidence les caractéristiques principales des passagers, ainsi que les relations entre certaines variables (comme le sexe, l'âge, la classe) et la survie. Ce rapport est structuré en plusieurs étapes : l'exploration des données, les visualisations et la formulation des hypothèses pour la modélisation future.
 
-II. Préparation des Données :
+1. Description Générale des Données
 
-Les données ont été pré-traitées comme suit :
+Les données contiennent des informations sur les passagers du Titanic. Les principales variables incluent :
 
-Gestion des valeurs manquantes : les valeurs manquantes ont été imputées pour les variables 'âge' (avec la médiane), 'fare' (avec la moyenne) et 'country' (avec 'Unknown').
-Suppression des colonnes non pertinentes pour l’analyse : 'ticketno', 'Nbr des frères et sœurs / conjoints à bord du Titanic' et 'Nbr des parents / enfants à bord du Titanic' en raison de trop de valeurs manquantes ou de faible pertinence pour l'analyse.
-Conversion des colonnes catégorielles en données numériques (par exemple, la colonne 'survived' a été convertie en 1 pour "yes" et 0 pour "no").
+Num : Identifiant du passager
+name : Nom du passager
+gender : Sexe du passager (masculin ou féminin)
+age : Âge du passager
+class : Classe de billet (1ère, 2ème, 3ème, ou membre d'équipage)
+embarked : Port d'embarquement
+country : Nationalité du passager
+fare : Prix payé pour le billet
+survived : Indicateur de survie (1 pour survivant, 0 pour non-survivant)
+Après nettoyage, les variables ticketno et Nbr des frères et sœurs / conjoints à bord, Nbr des parents / enfants à bord ont été supprimées en raison du grand nombre de valeurs manquantes.
 
-III. Points Clés des Visualisations :
+2. Traitement des Données Manquantes
 
-Distribution des âges des passagers :
+Âge : Imputation avec la médiane.
+Fare (prix du billet) : Imputation avec la moyenne.
+Country (nationalité) : Imputation avec "Unknown" lorsque la nationalité n'est pas renseignée.
+Après ces imputations, toutes les valeurs manquantes ont été éliminées.
 
-Les passagers sont majoritairement jeunes, avec une concentration entre 20 et 40 ans.
-Répartition des passagers par sexe et classe :
+3. Distribution des Passagers par Âge
 
-Il y a une majorité d’hommes par rapport aux femmes.
-La plupart des passagers sont en 3ème classe, suivis par les 2ème et 1ère classes.
-Taux de survie par sexe :
+La majorité des passagers ont entre 20 et 40 ans.
+Une répartition asymétrique avec un pic vers les 20-25 ans montre que les passagers plus jeunes étaient les plus nombreux.
+Il y a un nombre réduit de passagers âgés de plus de 60 ans.
 
-Les femmes ont un taux de survie bien plus élevé (environ 70%).
-Le taux de survie des hommes est faible (~20%).
-Taux de survie par classe :
+4. Répartition par Sexe
 
-Les passagers de 1ère classe ont le taux de survie le plus élevé (~65%).
-Le taux de survie diminue avec la classe : 2ème classe (~45%), 3ème classe (~25%).
-Corrélations entre variables :
+La proportion d’hommes est beaucoup plus élevée que celle des femmes (environ 3 hommes pour 1 femme).
+Cette différence significative dans la population des passagers aura un impact sur les résultats de survie, comme nous le verrons plus tard.
 
-La matrice de corrélation montre que 'fare' (prix du billet) a une corrélation positive modérée avec la survie (~0.19).
-L'âge a une corrélation faible avec la survie, mais est plus pertinent lorsqu'il est analysé en fonction de la classe et du sexe.
-Boxplots de l’âge et de la survie :
+5. Répartition des Passagers par Classe
 
-Les jeunes passagers (surtout en 3ème classe) ont des chances de survie plus faibles.
-Les passagers plus âgés de 1ère classe semblent avoir un taux de survie plus élevé.
-Heatmap des taux de survie par sexe et classe :
+La majorité des passagers voyageaient en troisième classe, suivie des membres d’équipage.
+La première classe représente une petite proportion des passagers, mais ces derniers ont eu un taux de survie plus élevé.
+Les classes plus basses étaient clairement surreprésentées, et cette surpopulation pourrait expliquer une mortalité plus importante.
 
-Les femmes en 1ère classe ont presque toutes survécu (~97%).
-Les hommes en 3ème classe ont un très faible taux de survie (~15%).
+6. Analyse du Taux de Survie par Sexe
 
-IV. Démarche pour la Modélisation :
+Les femmes ont eu un taux de survie beaucoup plus élevé (environ 75%) par rapport aux hommes (environ 20%).
+Cette différence peut être expliquée par les priorités d'évacuation : « Les femmes et les enfants d'abord ».
+Ce graphique renforce l’idée que le sexe a joué un rôle crucial dans les chances de survie.
 
-Après cette analyse visuelle, nous allons procéder à la modélisation. Les hypothèses principales à tester sont les suivantes :
+7. Analyse du Taux de Survie par Classe
 
-Le sexe est un facteur important de la survie.
-La classe est positivement corrélée avec la survie.
-L'âge joue un rôle significatif dans la probabilité de survie.
-Les prochaines étapes consisteront à appliquer plusieurs modèles de classification pour prédire la survie des passagers en fonction de ces caractéristiques, en utilisant des méthodes telles que la régression logistique, les forêts aléatoires et d'autres modèles d'apprentissage automatique.
+Les passagers de la première classe ont eu un taux de survie nettement plus élevé que ceux des autres classes.
+Les passagers de troisième classe et les membres de l'équipage ont eu les taux de survie les plus bas.
+Cela indique que les conditions d'évacuation étaient probablement plus favorables aux classes supérieures.
+
+8. Boxplot de l'Âge par Classe et Survie
+
+La distribution de l'âge montre que les passagers plus jeunes, en particulier en première classe, ont eu plus de chances de survivre.
+En troisième classe, les passagers de tous âges ont eu des taux de survie faibles, ce qui reflète les conditions précaires de cette catégorie.
+Les enfants semblent avoir eu des taux de survie plus élevés dans toutes les classes, en particulier dans les classes supérieures.
+
+9. Analyse de la Corrélation entre les Variables Numériques
+
+Une faible corrélation existe entre l’âge et la survie, ainsi qu'entre le prix du billet (fare) et la survie.
+Le prix du billet est légèrement corrélé à la survie, ce qui pourrait être lié au fait que les passagers de première classe ont payé des tarifs plus élevés et avaient de meilleures chances de survie.
+
+10. Analyse du Taux de Survie par Nationalité
+
+Les passagers d'origines asiatiques (Japon, Chine, Hong Kong) ont un taux de survie étonnamment élevé, tandis que les passagers de pays européens, comme la France et l'Allemagne, présentent des taux de survie plus variés.
+Certains pays, notamment ceux avec de faibles effectifs comme l’Argentine, ont un taux de survie très faible ou nul.
+Il pourrait y avoir des facteurs culturels ou économiques qui expliquent ces différences, mais une analyse plus approfondie est nécessaire.
+
+11. Heatmap du Taux de Survie par Nationalité et Classe
+
+Les passagers des États-Unis et d'Angleterre en première classe ont eu un taux de survie très élevé (plus de 75%).
+Les membres de l'équipage des nationalités d'Europe de l'Est ont eu des taux de survie plus bas que les autres.
+Les passagers de pays comme la France, en première classe, ont également un taux de survie très élevé (environ 80%).
+
+12. Heatmap du Taux de Survie par Nationalité et Sexe
+
+Les femmes de presque toutes les nationalités ont eu un taux de survie supérieur aux hommes, en particulier celles des États-Unis et de France.
+Cette analyse démontre que le sexe a eu une influence majeure dans presque toutes les nationalités, ce qui est conforme à la politique d'évacuation appliquée.
+
+Conclusions de l'EDA
+
+Différences de Survie par Sexe et Classe :
+
+Les femmes, en particulier en première classe, avaient les meilleures chances de survie.
+La classe jouait également un rôle important, les passagers de première classe bénéficiant des meilleures conditions d'évacuation.
+Influence de la Nationalité :
+
+Les passagers de certaines nationalités (notamment asiatiques et américaines) semblent avoir eu de meilleures chances de survie, surtout en première classe.
+Les différences de survie par nationalité et sexe montrent que la politique de sauvetage a eu des impacts inégaux selon les groupes.
+Importance de l’Âge :
+
+Les enfants avaient de meilleures chances de survie, notamment dans les classes supérieures.
+Les passagers plus âgés, en particulier dans les classes inférieures, ont eu de faibles chances de survie.
 
 
 ENGLISH VERSION :
 
 Exploratory Data Analysis Report - Project Titanic
 
-I. Introduction:
+Introduction:
 
 This report presents an exploratory analysis of data from the Titanic dataset. The aim is to highlight the main characteristics of the passengers, as well as the relationships between certain variables (such as gender, age, class) and survival. This report is structured in several stages: data exploration, visualisations and the formulation of hypotheses for future modelling.
 
-II. Data preparation :
+1. General Data Overview
+The dataset contains information about the passengers on the Titanic. The main variables include:
 
-The data were pre-processed as follows:
+Num: Passenger ID
+name: Passenger’s name
+gender: Passenger’s gender (male or female)
+age: Passenger’s age
+class: Ticket class (1st, 2nd, 3rd, or crew member)
+embarked: Port of embarkation
+country: Passenger’s nationality
+fare: Ticket fare
+survived: Survival indicator (1 for survived, 0 for did not survive)
+After cleaning, the variables ticket number, number of siblings/spouses aboard, and number of parents/children aboard were removed due to the large number of missing values.
 
-Missing values management: missing values were imputed for the variables ‘age’ (with the median), ‘fare’ (with the mean) and ‘country’ (with ‘Unknown’).
-Removal of columns not relevant to the analysis: ‘ticketno’, ‘No. of siblings/spouses on Titanic’ and ‘No. of parents/children on Titanic’ due to too many missing values or low relevance to the analysis.
-Conversion of categorical columns into numerical data (for example, the ‘survived’ column was converted into 1 for ‘yes’ and 0 for ‘no’).
+2. Handling Missing Data
+Age: Imputed using the median.
+Fare: Imputed using the mean.
+Country: Imputed as "Unknown" when nationality was not provided.
+After these imputations, all missing values were eliminated.
 
-III. Key points of the visualisations :
+3. Age Distribution of Passengers
 
-Passenger age distribution :
+Most passengers were between 20 and 40 years old.
+The distribution is skewed with a peak around 20-25 years, showing a higher number of younger passengers.
+The number of passengers older than 60 is very low.
+4. Gender Distribution
 
-Passengers are predominantly young, with a concentration between the ages of 20 and 40.
-Passenger distribution by gender and class:
+There are significantly more males than females (approximately 3 males for every female).
+This gender imbalance will impact survival outcomes, as we will see later.
+5. Passenger Distribution by Class
 
-There is a majority of men compared to women.
-Most passengers are in 3rd class, followed by 2nd and 1st class.
-Survival rate by gender:
+The majority of passengers traveled in third class, followed by crew members.
+First-class passengers represent a small proportion, but they had higher survival rates.
+The lower classes were clearly overrepresented, which might explain higher mortality rates among them.
 
-Women have a much higher survival rate (around 70%).
-Men have a low survival rate (~20%).
-Survival rate by class:
+6. Survival Rate by Gender
 
-1st class passengers have the highest survival rate (~65%).
-Survival rate decreases with class: 2nd class (~45%), 3rd class (~25%).
-Correlations between variables :
+Women had a significantly higher survival rate (~75%) compared to men (~20%).
+This difference can be attributed to evacuation priorities such as "Women and children first."
+This graph confirms that gender played a crucial role in survival chances.
 
-The correlation matrix shows that ‘fare’ (ticket price) has a moderate positive correlation with survival (~0.19).
-Age has a weak correlation with survival, but is more relevant when analysed by class and gender.
-Boxplots of age and survival :
+7. Survival Rate by Class
 
-Younger passengers (especially in 3rd class) have lower chances of survival.
-Older 1st class passengers appear to have a higher survival rate.
-Heatmap of survival rates by gender and class:
+First-class passengers had a significantly higher survival rate than those in other classes.
+Third-class passengers and crew members had the lowest survival rates.
+This indicates that evacuation conditions were likely more favorable for upper-class passengers.
 
-Women in 1st class almost all survived (~97%).
-Men in 3rd class have a very low survival rate (~15%).
+8. Boxplot of Age by Class and Survival
 
+The age distribution shows that younger passengers, especially in first class, had better survival chances.
+In third class, passengers of all ages had low survival rates, reflecting the challenging conditions for this group.
+Children appear to have had higher survival rates across all classes, particularly in upper classes.
 
-IV. Modelling approach :
+9. Correlation Matrix for Numerical Variables
 
-After this visual analysis, we will proceed with the modelling. The main hypotheses to be tested are as follows:
+There is a weak correlation between age and survival, as well as between fare and survival.
+Fare is slightly correlated with survival, which could be related to the fact that first-class passengers paid higher fares and had better chances of survival.
 
-Gender is an important factor in survival.
-Class is positively correlated with survival.
-Age plays a significant role in the probability of survival.
-The next steps will be to apply several classification models to predict passenger survival based on these characteristics, using methods such as logistic regression, random forests and other machine learning models.
+10. Survival Rate by Nationality
 
+Passengers from Asian countries (Japan, China, Hong Kong) had a surprisingly high survival rate, while passengers from European countries, such as France and Germany, showed more varied survival rates.
+Some countries, especially those with small sample sizes like Argentina, had very low or no survival rates.
+Cultural or economic factors may explain these differences, but further analysis is needed.
 
-Translated with DeepL.com (free version)
+11. Heatmap of Survival Rate by Nationality and Class
+
+First-class passengers from the United States and England had very high survival rates (above 75%).
+Crew members from Eastern European countries had lower survival rates than others.
+Passengers from countries such as France in first class also had high survival rates (~80%).
+
+12. Heatmap of Survival Rate by Nationality and Gender
+
+Women of almost all nationalities had higher survival rates compared to men, especially those from the United States and France.
+This analysis shows that gender had a significant influence on survival across almost all nationalities, which is consistent with the applied evacuation policies.
+
+EDA Conclusions
+
+Differences in Survival by Gender and Class:
+
+Women, particularly in first class, had the highest chances of survival.
+Class also played an important role, with first-class passengers benefiting from better evacuation conditions.
+Influence of Nationality:
+
+Passengers from certain nationalities (notably Asian and American) appeared to have better survival chances, especially in first class.
+Differences in survival by nationality and gender show that rescue policies had unequal impacts across groups.
+Importance of Age:
+
+Children had better survival chances, particularly in upper classes.
+Older passengers, especially in lower classes, had lower chances of survival.
