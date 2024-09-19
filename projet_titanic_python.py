@@ -211,9 +211,9 @@ random_search_logreg.fit(X_resampled_scaled, y_resampled)
 best_logreg = random_search_logreg.best_estimator_
 
 # Sauvegarder le meilleur modèle (best_logreg) après l'entraînement
-#import pickle
-#with open('logreg.pkl', 'wb') as file:
-    #pickle.dump(best_logreg, file)
+import pickle
+with open('logreg.pkl', 'wb') as file:
+    pickle.dump(best_logreg, file)
 
 # 2. Forêt Aléatoire avec RandomizedSearchCV et ajustement des poids de classe
 rf = RandomForestClassifier(class_weight='balanced', random_state=42)
@@ -227,8 +227,8 @@ random_search_rf.fit(X_resampled_scaled, y_resampled)
 best_rf = random_search_rf.best_estimator_
 
 # Sauvegarder le modèle Random Forest optimisé (best_rf) dans un fichier .pkl
-#with open('rf.pkl', 'wb') as file:
-    #pickle.dump(best_rf, file)
+with open('rf.pkl', 'wb') as file:
+    pickle.dump(best_rf, file)
 
 # 3. XGBoost avec RandomizedSearchCV
 xgb = XGBClassifier(random_state=42)
@@ -242,16 +242,16 @@ random_search_xgb.fit(X_resampled_scaled, y_resampled)
 best_xgb = random_search_xgb.best_estimator_
 
 # Sauvegarder le modèle XGBoost optimisé dans un fichier .pkl
-#with open('xgb.pkl', 'wb') as file:
-    #pickle.dump(best_xgb, file)
+with open('xgb.pkl', 'wb') as file:
+    pickle.dump(best_xgb, file)
 
 # 4. K-Nearest Neighbors (KNN)
 knn = KNeighborsClassifier(n_neighbors=5)
 knn.fit(X_resampled_scaled, y_resampled)
 
 # Sauvegarder le modèle K-Nearest Neighbors (KNN) dans un fichier .pkl
-#with open('knn.pkl', 'wb') as file:
-    #pickle.dump(knn, file)
+with open('knn.pkl', 'wb') as file:
+    pickle.dump(knn, file)
 
 # 5. Ensemble learning - Voting Classifier (combinaison de modèles)
 ensemble_model = VotingClassifier(estimators=[
