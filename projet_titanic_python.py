@@ -186,6 +186,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix, classification_rep
 from imblearn.over_sampling import SMOTE
 from sklearn.metrics import RocCurveDisplay
 from sklearn.neighbors import KNeighborsClassifier
+import pickle
 
 # Préparation des données avec encodage one-hot
 # Encodage one-hot des variables catégorielles
@@ -211,7 +212,6 @@ random_search_logreg.fit(X_resampled_scaled, y_resampled)
 best_logreg = random_search_logreg.best_estimator_
 
 # Sauvegarder le meilleur modèle (best_logreg) après l'entraînement
-import pickle
 with open('logreg.pkl', 'wb') as file:
     pickle.dump(best_logreg, file)
 
