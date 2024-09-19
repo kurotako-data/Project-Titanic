@@ -203,27 +203,55 @@ X_test_scaled = scaler.transform(X_test)
 # 1. Régression Logistique avec ajustement des poids de classe
 logreg = LogisticRegression(solver='lbfgs', max_iter=1000, class_weight='balanced', random_state=42)
 param_grid_logreg = {'C': [0.01, 0.1, 1, 10, 100], 'penalty': ['l2']}
+
 random_search_logreg = RandomizedSearchCV(logreg, param_distributions=param_grid_logreg, cv=5, scoring='accuracy', n_iter=5, random_state=42)
 random_search_logreg.fit(X_resampled_scaled, y_resampled)
+
+# Meilleur modèle résultant de la recherche
 best_logreg = random_search_logreg.best_estimator_
+
+# Sauvegarder le meilleur modèle (best_logreg) après l'entraînement
+#import pickle
+#with open('logreg.pkl', 'wb') as file:
+    #pickle.dump(best_logreg, file)
 
 # 2. Forêt Aléatoire avec RandomizedSearchCV et ajustement des poids de classe
 rf = RandomForestClassifier(class_weight='balanced', random_state=42)
 param_grid_rf = {'n_estimators': [100, 200, 500], 'max_depth': [None, 10, 20, 30], 'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4]}
+
+# RandomizedSearchCV pour rechercher les meilleurs hyperparamètres
 random_search_rf = RandomizedSearchCV(rf, param_distributions=param_grid_rf, cv=5, scoring='accuracy', n_iter=10, random_state=42)
 random_search_rf.fit(X_resampled_scaled, y_resampled)
+
+# Meilleur modèle résultant de la recherche
 best_rf = random_search_rf.best_estimator_
+
+# Sauvegarder le modèle Random Forest optimisé (best_rf) dans un fichier .pkl
+#with open('rf.pkl', 'wb') as file:
+    #pickle.dump(best_rf, file)
 
 # 3. XGBoost avec RandomizedSearchCV
 xgb = XGBClassifier(random_state=42)
 param_grid_xgb = {'n_estimators': [100, 200, 500], 'learning_rate': [0.01, 0.1, 0.2], 'max_depth': [3, 5, 7]}
+
+# RandomizedSearchCV pour rechercher les meilleurs hyperparamètres
 random_search_xgb = RandomizedSearchCV(xgb, param_distributions=param_grid_xgb, cv=5, scoring='accuracy', n_iter=10, random_state=42)
 random_search_xgb.fit(X_resampled_scaled, y_resampled)
+
+# Meilleur modèle résultant de la recherche
 best_xgb = random_search_xgb.best_estimator_
+
+# Sauvegarder le modèle XGBoost optimisé dans un fichier .pkl
+#with open('xgb.pkl', 'wb') as file:
+    #pickle.dump(best_xgb, file)
 
 # 4. K-Nearest Neighbors (KNN)
 knn = KNeighborsClassifier(n_neighbors=5)
 knn.fit(X_resampled_scaled, y_resampled)
+
+# Sauvegarder le modèle K-Nearest Neighbors (KNN) dans un fichier .pkl
+#with open('knn.pkl', 'wb') as file:
+    #pickle.dump(knn, file)
 
 # 5. Ensemble learning - Voting Classifier (combinaison de modèles)
 ensemble_model = VotingClassifier(estimators=[
