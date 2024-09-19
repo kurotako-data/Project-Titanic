@@ -196,6 +196,13 @@ titanic_data_encoded = pd.get_dummies(titanic_data, columns=['gender', 'class', 
 X = titanic_data_encoded.drop(columns=['Num', 'survived'])  # Features (variables explicatives)
 y = titanic_data_encoded['survived']  # Cible (variable à prédire)
 
+# Division des données en ensembles d'entraînement et de test
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+# Application de SMOTE pour rééquilibrer les classes
+smote = SMOTE(random_state=42)
+X_resampled, y_resampled = smote.fit_resample(X_train, y_train)
+
 # Standardisation des données numériques après encodage one-hot
 scaler = StandardScaler()
 X_resampled_scaled = scaler.fit_transform(X_resampled)
@@ -211,6 +218,7 @@ random_search_logreg.fit(X_resampled_scaled, y_resampled)
 # Meilleur modèle résultant de la recherche
 best_logreg = random_search_logreg.best_estimator_
 
+
 # Sauvegarder le meilleur modèle (best_logreg) après l'entraînement
 with open('logreg.pkl', 'wb') as file:
     pickle.dump(best_logreg, file)
@@ -225,6 +233,7 @@ random_search_rf.fit(X_resampled_scaled, y_resampled)
 
 # Meilleur modèle résultant de la recherche
 best_rf = random_search_rf.best_estimator_
+
 
 # Sauvegarder le modèle Random Forest optimisé (best_rf) dans un fichier .pkl
 with open('rf.pkl', 'wb') as file:
@@ -298,7 +307,7 @@ for name, model in models.items():
     print(confusion_matrix(y_test, y_pred))
     print('Rapport de classification:')
     print(classification_report(y_test, y_pred))
-
+    
 # 8. Courbes ROC et comparaison des AUC
 plt.figure(figsize=(10, 8))
 
@@ -348,6 +357,7 @@ plt.xlabel('Importance')
 plt.ylabel('Variables')
 plt.show()
 
+
 # Test de Chi-carré pour l'indépendance entre nationalité et survie
 contingency_table = pd.crosstab(titanic_data['country'], titanic_data['survived'])
 chi2, p, dof, ex = chi2_contingency(contingency_table)
@@ -357,6 +367,4 @@ print(f"Chi2 statistic pour la nationalité: {chi2}, p-value: {p}")
 contingency_table_class = pd.crosstab(titanic_data['class'], titanic_data['survived'])
 chi2_class, p_class, dof_class, ex_class = chi2_contingency(contingency_table_class)
 print(f"Chi2 statistic pour la classe: {chi2_class}, p-value: {p_class}")
-
-
 
