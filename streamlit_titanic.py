@@ -2,6 +2,13 @@ import streamlit as st
 import pandas as pd
 import pickle
 from sklearn.preprocessing import StandardScaler
+from PIL import Image
+
+# Charger l'image
+image = Image.open('images/photo_titanic.jpg') 
+
+# Afficher l'image dans l'application Streamlit
+st.image(image, caption='Le Titanic', use_column_width=True)
 
 # Fonction pour charger les modèles
 def load_model(model_path):
