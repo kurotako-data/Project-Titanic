@@ -1,3 +1,5 @@
+(French edition and after English translation)
+
 Rapport d'analyse sur la survie des passagers du Titanic
 
 Introduction :
@@ -170,3 +172,112 @@ En somme, cette analyse met en lumière que la survie des passagers du Titanic n
 
 #Code source : Un code Python détaillé pour la préparation des données, la modélisation et l'évaluation des résultats est disponible pour reproduire l'analyse et les résultats obtenus.
 
+ENGLISH version :
+
+Analysis Report on the Survival of Titanic Passengers
+
+Introduction: The sinking of the Titanic in 1912, one of the greatest maritime tragedies in history, resulted in the deaths of over 1,500 people. This project aims to analyze the data of the passengers and understand the factors that influenced their likelihood of survival.
+
+This report combines the results of the analyses and visualizations derived from the Titanic passenger dataset. The objective is to explore the survival of passengers based on different variables such as age, gender, social class, and nationality.
+
+The results include descriptive statistics, predictive models (logistic regression, random forest, XGBoost, voting classifier), as well as statistical analyses like the Chi-squared test. The report concludes with findings on the most significant determinants of survival.
+
+1. Analysis of Raw Data:
+
+Before addressing missing values, variables like "Number of siblings/spouses aboard" and "Number of parents/children aboard" contained many missing values. After cleaning, the variables retained for the analysis include:
+
+Num: Passenger ID
+Gender: Gender
+Age: Age
+Class: Passenger class (1st, 2nd, 3rd)
+Embarked: Port of embarkation (S = Southampton, C = Cherbourg, Q = Queenstown)
+Country: Nationality
+Fare: Ticket fare
+Survived: Indicator of survival (1 for survivor, 0 for non-survivor)
+The final data used for analysis contained no more missing values for the variables selected.
+
+2. Distribution of Variables:
+
+The majority of passengers were aged between 20 and 40, with a peak around 25.
+Most passengers were male (approximately 3 men for every 1 woman).
+The majority of passengers traveled in third class, and England was the most represented nationality.
+Key Visualization Points:
+
+Survival rate by gender: Women had a much higher survival rate (~70%), while men had a low survival rate (~20%).
+Survival rate by class: First-class passengers had the highest survival rate (~65%). This rate decreased with class: second class (~45%), third class (~25%).
+Correlations between Variables: The correlation matrix shows that ticket fare (fare) had a moderate positive correlation with survival (~0.19). Age had a weak correlation with survival, but more detailed analyses revealed its importance when combined with class and gender.
+
+Hypotheses for Modeling:
+
+Gender is a determining factor in survival.
+Social class is positively correlated with survival probability.
+Age impacts survival, especially when combined with class and gender.
+Comment: The distribution of data is critical to understanding survival trends. For example, the overrepresentation of men can skew some results if this unequal proportion is not considered.
+
+3. Predictive Models:
+
+Logistic Regression:
+
+Accuracy: 0.7557
+Precision (Class 1, survival): 0.63
+Recall (Class 1, survival): 0.58
+Random Forest:
+
+Accuracy: 0.7919
+Precision (Class 1, survival): 0.69
+Recall (Class 1, survival): 0.64
+XGBoost:
+
+Accuracy: 0.7738
+Precision (Class 1, survival): 0.66
+Recall (Class 1, survival): 0.61
+Voting Classifier:
+
+Accuracy: 0.7715
+Precision (Class 1, survival): 0.65
+Recall (Class 1, survival): 0.64
+Comment: Accuracy indicates the proportion of correct predictions, but this alone is not sufficient, especially for imbalanced classes. Recall, for instance, is more critical when analyzing survivors (Class 1) because it measures the model's ability to identify true survivors among predictions. Therefore, despite similar accuracy, Random Forest is often preferred here, as it has a better recall for the survivor class.
+
+4. Importance of Variables:
+
+According to the Random Forest model, the most important variables for survival are:
+
+Male gender (weight of 0.31)
+Age (weight of 0.23)
+Fare (weight of 0.13)
+Third class (weight of 0.04)
+Comment: The importance of variables helps identify the most significant factors in passenger survival. Here, gender, age, and ticket fare emerge as critical variables. This type of information is essential for more in-depth predictive analyses.
+
+5. Statistical Analysis: Chi-squared Tests
+
+Chi-squared test for nationality:
+
+Chi2 statistic: 191.86, p-value: 4.24e-19
+This result shows a strong association between passengers' nationality and their likelihood of survival.
+Chi-squared test for class:
+
+Chi2 statistic: 252.24, p-value: 1.36e-51
+The social class of passengers has a very strong correlation with survival chances.
+Comment: The Chi-squared test evaluates the association between two categorical variables (in this case, nationality/class and survival). A very low p-value (< 0.05) indicates a significant association between these variables and survival, confirming hypotheses based on visualizations and other analyses.
+
+6. Age Analysis:
+
+Younger passengers had better survival rates, especially those in first class. The age of third-class passengers shows lower survival across all age groups, while first-class passengers had a better chance, regardless of age.
+
+7. Gender Analysis:
+
+Women had a significantly higher survival rate compared to men. The "women and children first" policy is clearly reflected in the data, with a much higher survival rate for women, particularly in first class.
+
+8. Class Analysis:
+
+First-class passengers had a much higher survival rate. The majority of third-class passengers and crew members had a low survival rate, likely due to unfavorable evacuation conditions.
+
+9. Nationality Analysis:
+
+English, American, and Swiss first-class passengers had high survival rates, while passengers from less-represented countries or lower classes had lower survival rates. Chi-squared tests confirm that nationality had a significant impact.
+
+10. Conclusion:
+
+The main factors influencing the survival of Titanic passengers are gender, social class, age, and nationality. Women and children, as well as first-class passengers, had the best survival chances. Male passengers, especially in third class, had the lowest survival rates. The Random Forest model showed that male gender, age, and fare were the most important variables in predicting survival.
+
+Comment: This analysis highlights the importance of understanding the different biases in the data. For example, the Random Forest model identifies the most critical variables for survival, but this doesn't mean other variables have no influence. It's essential to consider each variable in its context. Age and gender, for instance, are often interdependent factors in such situations. Future analyses could focus on the interaction between these variables to gain a better understanding of survival dynamics.
