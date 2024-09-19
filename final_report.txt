@@ -147,11 +147,26 @@ Les passagers d'origine anglaise, américaine et suisse en première classe avai
 
 **Commentaire** : La nationalité joue un rôle souvent négligé, mais dans ce cas, elle reflète probablement des différences socio-économiques. Les passagers de pays plus riches ou plus influents pouvaient avoir un accès privilégié aux ressources et à l'évacuation.
 
-10. Conclusion :
+10. Rapport d'analyse-modélisation :
 
 Les principaux facteurs influençant la survie des passagers du Titanic sont le sexe, la classe sociale, l'âge et la nationalité. Les femmes et les enfants, ainsi que les passagers des classes supérieures, avaient de meilleures chances de survie. Les passagers masculins, particulièrement en troisième classe, avaient les taux de survie les plus bas. Le modèle Random Forest a montré que le sexe masculin, l'âge et le tarif du billet étaient les variables les plus importantes pour prédire la survie.
 
 **Commentaire** : Cette analyse démontre l'importance de comprendre les différents biais présents dans les données. Par exemple, le modèle Random Forest identifie les variables les plus importantes pour la survie, mais cela ne signifie pas que les autres variables n'ont pas d'influence. Il est crucial de considérer chaque variable dans son contexte. L'âge et le sexe, par exemple, sont souvent des facteurs interdépendants dans ce type de situation. Les analyses futures pourraient se concentrer sur l'interaction entre ces variables pour une meilleure compréhension de la dynamique de survie.
+
+11. Conclusion :
+
+Conclusion :
+
+L'analyse approfondie des données des passagers du Titanic révèle que plusieurs facteurs clés ont influencé les chances de survie. Parmi eux, le sexe, la classe sociale, l'âge et la nationalité ressortent comme déterminants majeurs. Les femmes, surtout en première classe, bénéficiaient de meilleures conditions d'évacuation, confirmant la règle historique "Femmes et enfants d'abord". Ce fait se reflète dans les taux de survie considérablement plus élevés des femmes par rapport aux hommes, avec un taux moyen de survie féminin avoisinant les 70%, contre environ 20% pour les hommes.
+
+L'âge a également joué un rôle important, notamment lorsqu'il est combiné à la classe. Les passagers plus jeunes avaient une meilleure survie, particulièrement ceux voyageant en première classe. Toutefois, les passagers de troisième classe, quel que soit leur âge, étaient nettement désavantagés, ce qui souligne une forte inégalité dans l'accès aux canots de sauvetage. La différence de survie par classe est frappante : les passagers de première classe avaient un taux de survie d'environ 65%, alors que celui des passagers de troisième classe tombait à environ 25%.
+
+Concernant la nationalité, les résultats montrent une forte association entre la nationalité des passagers et leur probabilité de survie, confirmée par un test du Chi2 avec une p-value extrêmement faible (4.24e-19). Ce résultat suggère que la nationalité n'était pas simplement un facteur neutre dans cette tragédie. Les passagers venant de pays plus développés ou influents, tels que l'Angleterre, les États-Unis ou la Suisse, avaient des taux de survie plus élevés. Ces passagers étaient souvent en première classe et anglophone, ce qui leur offrait des conditions d'évacuation plus favorables. En revanche, les passagers de pays moins représentés ou des classes inférieures, notamment en troisième classe, avaient un taux de survie bien plus faible.
+
+Il est aussi important de considérer que la langue parlée à bord pourrait avoir influencé les chances de survie. Le Titanic étant un navire britannique, les instructions d’évacuation étaient probablement données en anglais. À une époque où la maîtrise de cette langue n’était pas aussi courante qu’aujourd'hui, cela pourrait avoir désavantagé certains passagers, notamment ceux dont la langue maternelle n’était pas l’anglais, ce qui pourrait expliquer, en partie, les écarts observés selon les nationalités.
+
+En somme, cette analyse met en lumière que la survie des passagers du Titanic ne dépendait pas uniquement de facteurs biologiques tels que l'âge ou le sexe, mais aussi de leur position sociale (classe) et de leur nationalité. Ces résultats illustrent comment des facteurs structurels et sociaux ont influencé l'accès aux ressources vitales pendant la catastrophe, offrant une leçon sur l'importance de l'équité dans des situations d'urgence.
+
 
 #Code source : Un code Python détaillé pour la préparation des données, la modélisation et l'évaluation des résultats est disponible pour reproduire l'analyse et les résultats obtenus.
 
