@@ -1,0 +1,157 @@
+Rapport d'analyse sur la survie des passagers du Titanic
+
+Introduction :
+Le naufrage du Titanic en 1912, une des plus grandes tragédies maritimes de l'histoire, a causé la mort de plus de 1500 personnes. 
+Ce projet vise à analyser les données des passagers et à comprendre les facteurs qui ont influencé leur probabilité de survie. 
+
+Ce rapport combine les résultats des analyses et des visualisations fournies à partir du jeu de données des passagers du Titanic.
+L'objectif est d'explorer la survie des passagers en fonction de différentes variables telles que l'âge, le sexe, la classe sociale et la nationalité.
+
+Les résultats incluent des statistiques descriptives, des modèles prédictifs (régression logistique, forêt aléatoire, XGBoost, classificateur de vote),
+ainsi que des analyses statistiques comme le test du Chi2. Le rapport se termine par des conclusions sur les déterminants les plus significatifs de la survie.
+
+1. Analyse des Données Brutes :
+
+Avant le traitement des valeurs manquantes, les variables comme "Nbr des frères et sœurs / conjoints à bord", "Nbr des parents / enfants à bord",
+et "ticketno" contenaient de nombreuses valeurs manquantes. Après nettoyage, les variables retenues pour l'analyse incluent :
+
+- Num : Identifiant du passager
+- gender : Sexe
+- age : Âge
+- class : La classe du passager (1ère, 2e, 3e)
+- embarked : Port d'embarquement (S = Southampton, C = Cherbourg, Q = Queenstown)
+- country : Nationalité
+- fare : Tarif du billet
+- survived : Indicateur de survie (1 pour survivant, 0 pour non-survivant)
+
+
+Les données finales utilisées pour l'analyse ne contiennent plus de valeurs manquantes pour les variables retenues.
+
+2. Distribution des variables :
+
+- L'âge des passagers se concentre majoritairement entre 20 et 40 ans avec une asymétrie autour de 25 ans.
+- Le sexe est majoritairement masculin (environ 3 hommes pour 1 femme).
+- La majorité des passagers voyageaient en troisième classe, et l'Angleterre est la nationalité la plus représentée.
+
+2.1 Points Clés des Visualisations :
+Taux de survie par sexe :
+Les femmes avaient un taux de survie beaucoup plus élevé (~70%).
+Le taux de survie des hommes était faible (~20%).
+Taux de survie par classe :
+Les passagers de première classe avaient le taux de survie le plus élevé (~65%).
+Ce taux diminue avec la classe : deuxième classe (~45%), troisième classe (~25%).
+
+2.2 Corrélations entre les Variables
+La matrice de corrélation montre que le prix du billet (fare) a une corrélation positive modérée avec la survie (~0.19).
+L'âge a une faible corrélation avec la survie, mais des analyses plus détaillées montrent que cette variable est pertinente lorsqu'on la combine avec la classe et le sexe.
+
+2.3 Hypothèses pour la Modélisation
+Le sexe est un facteur déterminant de la survie.
+La classe sociale est positivement corrélée à la probabilité de survie.
+L'âge a un impact sur la survie, particulièrement lorsque combiné à la classe et au sexe.
+
+Et quid de la nationalité (pour une prise en compte de langue natale des voyageurs ) et donc en sous-jacent :
+La bonne compréhension des instructions lors de l'évacuation (forçement en langue Anglaise car le Titanic était sous pavillon Brittanique) sachant qu'à cette date, 
+l'usage de cette langue était moins répandu que de nos jours.
+
+**Commentaire** : La répartition des données est un point crucial pour comprendre les tendances de survie. Par exemple, la surreprésentation des hommes
+peut biaiser certains résultats si on ne prend pas en compte cette proportion inégale.
+
+3. Modèles prédictifs :
+
+Modèle: Régression Logistique :
+- Accuracy: 0.7557
+- Matrice de confusion :
+  [[251 49]
+   [59 83]]
+- Précision (classe 1, survie) : 0.63
+- Recall (classe 1, survie) : 0.58
+
+Modèle: Random Forest :
+- Accuracy: 0.7919
+- Matrice de confusion :
+  [[259 41]
+   [51 91]]
+- Précision (classe 1, survie) : 0.69
+- Recall (classe 1, survie) : 0.64
+
+Modèle: XGBoost :
+- Accuracy: 0.7738
+- Matrice de confusion :
+  [[256 44]
+   [56 86]]
+- Précision (classe 1, survie) : 0.66
+- Recall (classe 1, survie) : 0.61
+
+Modèle: Voting Classifier :
+- Accuracy: 0.7715
+- Matrice de confusion :
+  [[250 50]
+   [51 91]]
+- Précision (classe 1, survie) : 0.65
+- Recall (classe 1, survie) : 0.64
+
+**Commentaire** : L'accuracy indique la proportion de prédictions correctes, mais ce n'est pas toujours suffisant, surtout pour des classes déséquilibrées.
+Le recall, par exemple, est plus important pour analyser les survivants (classe 1), car il mesure la capacité du modèle à identifier les vrais survivants parmi les prédictions.
+C'est pourquoi, malgré une accuracy comparable, le Random Forest est souvent préféré ici, car il a un meilleur recall pour la classe des survivants.
+
+4. Importance des Variables :
+
+Selon le modèle Random Forest, les variables ayant le plus d'importance pour la survie sont :
+- Le sexe masculin (gender_male), avec un poids de 0.31
+- L'âge (age), avec un poids de 0.23
+- Le prix du billet (fare), avec un poids de 0.13
+- La classe 3ème (class_3rd), avec un poids de 0.04
+
+**Commentaire** : L'importance des variables permet d'identifier les facteurs les plus déterminants dans la survie des passagers.
+Ici, on constate que le sexe, l'âge et le prix du billet sont des variables critiques. Ce genre d'information est essentiel pour des analyses prédictives plus approfondies.
+
+4.1 Considérations Éthiques
+Certains biais potentiels dans les données historiques doivent être pris en compte. 
+Les différences de traitement entre les sexes et les classes sociales reflètent les normes sociales de l'époque et peuvent introduire des biais dans les résultats du modèle.
+
+5. Analyse Statistique : Tests du Chi2
+
+- Test du Chi2 pour la nationalité :
+  Chi2 statistic : 191.86, p-value : 4.24e-19
+  Ce résultat montre une forte association entre la nationalité des passagers et leur probabilité de survie.
+
+- Test du Chi2 pour la classe :
+  Chi2 statistic : 252.24, p-value : 1.36e-51
+  La classe sociale des passagers a une très forte corrélation avec les chances de survie.
+
+**Commentaire** : Le test du Chi2 évalue l'association entre deux variables catégorielles (ici, nationalité/classe et survie). Une p-value très faible (< 0.05)
+signifie qu'il existe une association significative entre ces variables et la survie. Cela permet de confirmer les hypothèses basées sur les visualisations ou autres analyses.
+
+6. Analyse par Âge :
+
+Les passagers plus jeunes ont eu une meilleure survie, en particulier ceux en première classe. L'âge des passagers de troisième classe montre une survie plus faible dans toutes les tranches d'âge, tandis que les passagers en première classe avaient une meilleure chance, quel que soit leur âge.
+
+**Commentaire** : L'âge est un facteur clé, car les jeunes passagers, surtout en première classe, bénéficiaient de meilleures conditions d'évacuation et ont été priorisés.
+
+7. Analyse par Sexe :
+
+Les femmes avaient un taux de survie bien supérieur à celui des hommes. Le modèle "Femmes et enfants d'abord" se reflète clairement dans les données, avec un taux de survie féminin bien plus élevé, surtout en première classe.
+
+**Commentaire** : Cette différence de survie par sexe est renforcée par la politique d'évacuation qui favorisait les femmes et les enfants. Cela explique pourquoi le sexe est un facteur si déterminant dans les modèles.
+
+8. Analyse par Classe :
+
+Les passagers de première classe avaient un taux de survie significativement plus élevé. La majorité des passagers de troisième classe et des membres d'équipage ont eu un faible taux de survie, probablement dû à des conditions d'évacuation défavorables.
+
+**Commentaire** : Les conditions d'évacuation pour les passagers de troisième classe étaient notoirement inférieures à celles de la première classe. Cette inégalité dans l'accès aux canots de sauvetage se reflète dans les résultats du modèle.
+
+9. Analyse par Nationalité :
+
+Les passagers d'origine anglaise, américaine et suisse en première classe avaient des taux de survie élevés. En revanche, les passagers de pays moins représentés ou en classes inférieures avaient un taux de survie plus bas. Les tests du Chi2 confirment que la nationalité a eu un impact significatif.
+
+**Commentaire** : La nationalité joue un rôle souvent négligé, mais dans ce cas, elle reflète probablement des différences socio-économiques. Les passagers de pays plus riches ou plus influents pouvaient avoir un accès privilégié aux ressources et à l'évacuation.
+
+10. Conclusion :
+
+Les principaux facteurs influençant la survie des passagers du Titanic sont le sexe, la classe sociale, l'âge et la nationalité. Les femmes et les enfants, ainsi que les passagers des classes supérieures, avaient de meilleures chances de survie. Les passagers masculins, particulièrement en troisième classe, avaient les taux de survie les plus bas. Le modèle Random Forest a montré que le sexe masculin, l'âge et le tarif du billet étaient les variables les plus importantes pour prédire la survie.
+
+**Commentaire** : Cette analyse démontre l'importance de comprendre les différents biais présents dans les données. Par exemple, le modèle Random Forest identifie les variables les plus importantes pour la survie, mais cela ne signifie pas que les autres variables n'ont pas d'influence. Il est crucial de considérer chaque variable dans son contexte. L'âge et le sexe, par exemple, sont souvent des facteurs interdépendants dans ce type de situation. Les analyses futures pourraient se concentrer sur l'interaction entre ces variables pour une meilleure compréhension de la dynamique de survie.
+
+#Code source : Un code Python détaillé pour la préparation des données, la modélisation et l'évaluation des résultats est disponible pour reproduire l'analyse et les résultats obtenus.
+
