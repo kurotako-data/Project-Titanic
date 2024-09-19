@@ -19,13 +19,13 @@ def load_model(model_path):
 
 
 # Charger les modèles entraînés
-with open('logreg.pkl', 'rb') as file:
+with open('models/logreg.pkl', 'rb') as file:
     logreg_model = pickle.load(file)
-with open('rf.pkl', 'rb') as file:
+with open('models/rf.pkl', 'rb') as file:
     rf_model = pickle.load(file)
-with open('xgb.pkl', 'rb') as file:
+with open('models/xgb.pkl', 'rb') as file:
     xgb_model = pickle.load(file)
-with open('knn.pkl', 'rb') as file:
+with open('models/knn.pkl', 'rb') as file:
     knn_model = pickle.load(file)
 
 # Fonction de prédiction avec le modèle sélectionné
