@@ -18,7 +18,6 @@ def load_model(model_path):
         model = pickle.load(file)
     return model
 
-
 # Charger les modèles entraînés
 with open('models/logreg.pkl', 'rb') as file:
     logreg_model = pickle.load(file)
@@ -36,12 +35,15 @@ def predict_survival(model, user_data):
     categorical_features = ['sex', 'embarked', 'class']
     numerical_features = ['age', 'fare']
 
+    # Définir les colonnes des données utilisateur
+    user_data_df = pd.DataFrame(user_data, columns=['age', 'fare', 'sex', 'embarked', 'class'])
+
     preprocessor = ColumnTransformer(
         transformers=[
             ('num', StandardScaler(), numerical_features),
             ('cat', OneHotEncoder(), categorical_features)])
 
-    user_data_scaled = preprocessor.fit_transform(user_data)
+    user_data_scaled = preprocessor.fit_transform(user_data_df)
     
     # Prédiction
     prediction = model.predict(user_data_scaled)
@@ -78,4 +80,5 @@ else:
 if st.button("Prédire la survie"):
     result = predict_survival(model, user_data)
     st.write(f"La prédiction est: {'Survivra' if result == 1 else 'Ne survivra pas'}")
+
 
