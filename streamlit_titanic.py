@@ -1,7 +1,8 @@
 import streamlit as st
-import pandas as pd
 import pickle
-from sklearn.preprocessing import StandardScaler
+import numpy as np
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
 from PIL import Image
 
 # Charger l'image
@@ -16,50 +17,64 @@ def load_model(model_path):
         model = pickle.load(file)
     return model
 
-# Charger les différents modèles
-logreg_model = load_model('models/logreg.pkl')
-rf_model = load_model('models/rf.pkl')
-xgb_model = load_model('models/xgb.pkl')
-knn_model = load_model('models/knn.pkl')
 
-# Interface utilisateur Streamlit
-st.title("Prédiction de la survie des passagers du Titanic")
+# Charger les modèles entraînés
+with open('logreg.pkl', 'rb') as file:
+    logreg_model = pickle.load(file)
+with open('rf.pkl', 'rb') as file:
+    rf_model = pickle.load(file)
+with open('xgb.pkl', 'rb') as file:
+    xgb_model = pickle.load(file)
+with open('knn.pkl', 'rb') as file:
+    knn_model = pickle.load(file)
 
-# Sélection du modèle par l'utilisateur
+# Fonction de prédiction avec le modèle sélectionné
+def predict_survival(model, user_data):
+    # Prétraitement des données comme pour l'entraînement (par exemple, encodage des variables catégorielles)
+    # Variables encodées et standardisées ici
+    categorical_features = ['sex', 'embarked', 'class']
+    numerical_features = ['age', 'fare']
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('num', StandardScaler(), numerical_features),
+            ('cat', OneHotEncoder(), categorical_features)])
+
+    user_data_scaled = preprocessor.fit_transform(user_data)
+    
+    # Prédiction
+    prediction = model.predict(user_data_scaled)
+    return prediction
+
+# Interface Streamlit
+st.title("Prédictions de survie du Titanic")
+
+# Sélection du modèle
 model_choice = st.selectbox("Choisissez un modèle pour faire des prédictions", 
                             ("Régression Logistique", "Forêt Aléatoire", "XGBoost", "KNN"))
 
-# Entrée des caractéristiques des passagers
+# Collecter les entrées utilisateur
 age = st.slider("Âge du passager", 0, 80, 30)
 fare = st.slider("Tarif du billet", 0, 500, 50)
-gender = st.selectbox("Sexe", ["male", "female"])
-embarked = st.selectbox("Port d'embarquement", ["S", "C", "Q"])
-pclass = st.selectbox("Classe", [1, 2, 3])
+sex = st.selectbox("Sexe", ("male", "female"))
+embarked = st.selectbox("Port d'embarquement", ("S", "C", "Q"))
+pclass = st.selectbox("Classe", (1, 2, 3))
 
-# Prétraiter les données entrées par l'utilisateur
-gender_num = 1 if gender == 'male' else 0
-embarked_num = 0 if embarked == 'S' else (1 if embarked == 'C' else 2)
+# Convertir les données en tableau pour prédiction
+user_data = np.array([[age, fare, sex, embarked, pclass]])
 
-# Assemblage des caractéristiques
-user_data = pd.DataFrame([[pclass, age, fare, gender_num, embarked_num]],
-                         columns=["Pclass", "Age", "Fare", "Sex", "Embarked"])
-
-# Normalisation si nécessaire
-scaler = StandardScaler()
-user_data_scaled = scaler.fit_transform(user_data)
-
-# Faire des prédictions en fonction du modèle choisi
+# Choisir le modèle
 if model_choice == "Régression Logistique":
-    prediction = logreg_model.predict(user_data_scaled)
+    model = logreg_model
 elif model_choice == "Forêt Aléatoire":
-    prediction = rf_model.predict(user_data_scaled)
+    model = rf_model
 elif model_choice == "XGBoost":
-    prediction = xgb_model.predict(user_data_scaled)
+    model = xgb_model
 else:
-    prediction = knn_model.predict(user_data_scaled)
+    model = knn_model
 
-# Afficher le résultat
-if prediction[0] == 1:
-    st.success("Le passager a survécu")
-else:
-    st.error("Le passager n'a pas survécu")
+# Bouton de prédiction
+if st.button("Prédire la survie"):
+    result = predict_survival(model, user_data)
+    st.write(f"La prédiction est: {'Survivra' if result == 1 else 'Ne survivra pas'}")
+
