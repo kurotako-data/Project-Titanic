@@ -44,6 +44,11 @@ st.write("""
 Les nationalités dominantes étaient principalement l'**Angleterre**, les **États-Unis**, et l'**Irlande**. Cependant, en tenant compte du contexte de l'époque, beaucoup de passagers "britanniques" provenaient de différentes régions de l'Empire Britannique, comme l'**Australie**, le **Canada** et d'autres colonies. En analysant ces données, nous comprenons que la langue anglaise était courante, mais ces passagers avaient des cultures et origines variées, ce qui pourrait avoir influencé leur expérience à bord et leurs chances de survie.
 """)
 
+# Nouveau paragraphe sur la barrière linguistique et l'impact potentiel de la langue maternelle
+st.write("""
+Il est important de noter que le Titanic, étant un navire britannique, les instructions d’évacuation ont forcément été communiquées en anglais. À cette époque, la maîtrise de l’anglais n’était pas aussi répandue qu’aujourd’hui, surtout parmi les passagers issus de pays non anglophones. Cela pourrait avoir impacté leur capacité à comprendre rapidement les directives en situation de crise. Les passagers dont la langue maternelle n’était pas l’anglais ont peut-être été désavantagés lors de l’évacuation. Ce facteur, bien que difficile à quantifier, est crucial pour mieux comprendre les disparités de survie selon la nationalité.
+""")
+
 st.subheader("Distribution des âges des passagers")
 image_ages = Image.open("images/4 Distribution des âges des passagers.png")
 st.image(image_ages, use_column_width=False, width=600)
@@ -69,6 +74,7 @@ image_survie_nationalite = Image.open("images/12 Taux de survie par nationalite�
 st.image(image_survie_nationalite, use_column_width=False, width=800)  # Image agrandie
 st.write("""
 Parmi les nationalités, les passagers issus du **Royaume-Uni**, des **États-Unis** et de l'**Irlande** étaient les plus nombreux. Toutefois, des groupes moins représentés comme les **Syriens** et les **Suédois** ont eu des taux de survie relativement élevés. Ce constat est intéressant car il montre que les groupes minoritaires ont, dans certains cas, bénéficié de meilleures chances de survie.
+Cependant, il faut garder à l'esprit que l'anglais n'était pas une langue universelle à l'époque, et que les passagers dont la langue maternelle n'était pas l'anglais ont potentiellement eu plus de difficulté à comprendre les instructions cruciales lors de l'évacuation.
 """)
 
 st.subheader("Distribution de l'âge des survivants par sexe")
@@ -109,13 +115,7 @@ st.image(image_importance, use_column_width=False, width=600)
 # Section Conclusion
 st.header("Conclusion")
 st.write("""
-Cette analyse approfondie montre que des facteurs tels que le sexe, l'âge, et la classe sociale ont eu une influence importante sur la survie. Cependant, la **nationalité** se révèle également être une variable intrigante, notamment pour les passagers issus des régions périphériques de l'Empire Britannique, comme l'Irlande ou les colonies asiatiques. Le contexte de l'époque, avec une forte présence de passagers britanniques de diverses origines culturelles, a sans doute influencé ces résultats.
-""")
-st.write("""
-En conclusion, l’analyse des données du Titanic révèle des inégalités frappantes dans les chances de survie, mais elle montre également que des facteurs culturels et géographiques, tels que la nationalité, peuvent aussi avoir influencé ces résultats de manière subtile.
-""")
-
-st.write("Merci d'avoir consulté ce projet ! Pour plus de détails et d'analyses supplémentaires, vous pouvez visiter mon portfolio GitHub.")
+Cette analyse approfondie montre que des facteurs tels que le sexe, l'âge, et la classe sociale ont eu une influence importante sur la survie. Cependant, la **nationalité** se révèle également être une variable intrigante, notamment pour les passagers issus des régions périphériques de l'Empire Britannique, comme l'Irlande ou les colonies asiatiques. Le contexte de l'époque, avec une forte présence de passVoici la version finale améliorée de ton code **Streamlit**, avec l'ajout du paragraphe expliquant l'impact de la langue maternelle des passagers et la barrière linguistique lors de l'évacuation. Les commentaires sont également ajustés pour refléter le thème de la **nationalité** dans l'analyse de la survie.
 
 
 
