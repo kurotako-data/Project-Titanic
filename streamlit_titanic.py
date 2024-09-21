@@ -1,84 +1,112 @@
-import pandas as pd
+#import pandas as pd
+#import pickle
+#import numpy as np
+
 import streamlit as st
-import pickle
-import numpy as np
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.compose import ColumnTransformer
 from PIL import Image
 
-# Charger l'image
+# Configuration de la page
+st.set_page_config(page_title="Projet Titanic - Portfolio Data Analyst", layout="wide")
+
+# Titre principal
+st.title("Analyse des Données des Passagers du Titanic")
+st.write("""
+Bienvenue dans ce projet d'analyse des données sur les passagers du Titanic. Ce projet explore les différents facteurs qui ont influencé la survie des passagers lors du naufrage tragique en 1912. 
+Nous allons parcourir différentes analyses statistiques et modélisations pour comprendre l'impact de variables comme l'âge, le sexe, la classe sociale, et la nationalité.
+""")
+
+# Section Introduction
+st.header("Introduction")
+st.write("""
+Le naufrage du Titanic a causé la mort de plus de 1500 personnes. Ce projet analyse les données des passagers afin de comprendre quels facteurs ont influencé leurs chances de survie.
+""")
+st.write("""
+Les résultats incluent des analyses statistiques et des modèles prédictifs, comme la régression logistique, Random Forest, XGBoost, et un classificateur Voting. Nous avons aussi utilisé le test du Chi² pour évaluer l'association entre certaines variables catégorielles et la survie.
+""")
+
+# Charger l'image du Titanic
 image = Image.open('images/photo_titanic.jpg') 
 
 # Afficher l'image dans l'application Streamlit
 st.image(image, caption='Le Titanic', use_column_width=True)
 
-# Fonction pour charger les modèles
-def load_model(model_path):
-    with open(model_path, 'rb') as file:
-        model = pickle.load(file)
-    return model
+# Section sur la distribution des données
+st.header("Analyse Exploratoire des Données")
+st.subheader("Distribution des variables")
+st.write("""
+L'analyse exploratoire a révélé plusieurs tendances intéressantes :
+- L'âge des passagers est concentré majoritairement entre 20 et 40 ans.
+- La majorité des passagers voyageaient en troisième classe.
+- Les hommes représentaient environ 75 % des passagers.
+""")
 
-# Charger les modèles entraînés
-with open('models/logreg.pkl', 'rb') as file:
-    logreg_model = pickle.load(file)
-with open('models/rf.pkl', 'rb') as file:
-    rf_model = pickle.load(file)
-with open('models/xgb.pkl', 'rb') as file:
-    xgb_model = pickle.load(file)
-with open('models/knn.pkl', 'rb') as file:
-    knn_model = pickle.load(file)
+# Affichage des graphiques de distribution
+st.subheader("Distribution des âges des passagers")
+image_ages = Image.open("images/4 Distribution des âges des passagers.png")
+st.image(image_ages, caption="Distribution des âges", use_column_width=True)
 
-# Fonction de prédiction avec le modèle sélectionné
-def predict_survival(model, user_data):
-    # Prétraitement des données comme pour l'entraînement (par exemple, encodage des variables catégorielles)
-    # Variables encodées et standardisées ici
-    categorical_features = ['sex', 'embarked', 'class']
-    numerical_features = ['age', 'fare']
+st.subheader("Répartition des passagers par sexe")
+image_sexe = Image.open("images/5 Répartition des passagers par sexe.png")
+st.image(image_sexe, caption="Répartition des passagers par sexe", use_column_width=True)
 
-    # Définir les colonnes des données utilisateur
-    user_data_df = pd.DataFrame(user_data, columns=['age', 'fare', 'sex', 'embarked', 'class'])
+st.subheader("Répartition des passagers par classe")
+image_classe = Image.open("images/6 Répartition des passagers par classe.png")
+st.image(image_classe, caption="Répartition des passagers par classe", use_column_width=True)
 
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ('num', StandardScaler(), numerical_features),
-            ('cat', OneHotEncoder(), categorical_features)])
+# Section sur les corrélations
+st.header("Corrélations des Variables")
+st.write("""
+Nous avons examiné les corrélations entre différentes variables pour mieux comprendre les facteurs influençant la survie des passagers. Le tarif du billet (fare) montre une corrélation positive avec la survie, tandis que le sexe et la classe sociale sont des facteurs clés.
+""")
+image_correlation = Image.open("images/11 Matrice de corrélation des variables numériques.png")
+st.image(image_correlation, caption="Matrice de corrélation des variables numériques", use_column_width=True)
 
-    user_data_scaled = preprocessor.fit_transform(user_data_df)
-    
-    # Prédiction
-    prediction = model.predict(user_data_scaled)
-    return prediction
+# Section sur les modèles prédictifs
+st.header("Modélisation et Prédiction")
+st.write("""
+Plusieurs modèles ont été testés pour prédire la survie des passagers. Voici les résultats des principaux modèles :
+- Régression Logistique
+- Random Forest
+- XGBoost
+- Classificateur de Vote
+""")
 
-# Interface Streamlit
-st.title("Prédictions de survie du Titanic")
+# Affichage des résultats des modèles
+st.subheader("Courbes ROC des différents modèles")
+st.write("Courbe ROC pour Random Forest, XGBoost et Voting Classifier.")
+col1, col2, col3 = st.columns(3)
+with col1:
+    image_roc_rf = Image.open("images/21 courbe ROC  RF.png")
+    st.image(image_roc_rf, caption="ROC Random Forest")
+with col2:
+    image_roc_xgb = Image.open("images/22 courbe ROC  XGB.png")
+    st.image(image_roc_xgb, caption="ROC XGBoost")
+with col3:
+    image_roc_voting = Image.open("images/23 courbe ROC Voting classifier.png")
+    st.image(image_roc_voting, caption="ROC Voting Classifier")
 
-# Sélection du modèle
-model_choice = st.selectbox("Choisissez un modèle pour faire des prédictions", 
-                            ("Régression Logistique", "Forêt Aléatoire", "XGBoost", "KNN"))
+# Section sur l'importance des variables
+st.header("Importance des Variables")
+st.write("""
+Le modèle Random Forest a permis d'identifier les variables les plus importantes dans la prédiction de la survie des passagers. Le sexe, l'âge et le tarif du billet sont les trois variables les plus influentes.
+""")
+image_importance = Image.open("images/25 Importance des 10 principales variables selon Random Forest.png")
+st.image(image_importance, caption="Importance des variables selon Random Forest", use_column_width=True)
 
-# Collecter les entrées utilisateur
-age = st.slider("Âge du passager", 0, 80, 30)
-fare = st.slider("Tarif du billet", 0, 500, 50)
-sex = st.selectbox("Sexe", ("male", "female"))
-embarked = st.selectbox("Port d'embarquement", ("S", "C", "Q"))
-pclass = st.selectbox("Classe", (1, 2, 3))
+# Section Conclusion
+st.header("Conclusion")
+st.write("""
+L'analyse approfondie des données des passagers du Titanic révèle que plusieurs facteurs ont influencé la survie :
+- Les femmes et les enfants avaient de meilleures chances de survie.
+- Les passagers de première classe avaient un avantage significatif.
+- La nationalité et la langue parlée à bord ont également joué un rôle non négligeable.
+""")
+st.write("""
+Les modèles prédictifs comme Random Forest et XGBoost ont montré des performances solides avec des AUC proches de 0,80. Ces résultats mettent en évidence l'importance de comprendre les interactions entre différentes variables lors de l'analyse de la survie dans de telles tragédies.
+""")
 
-# Convertir les données en tableau pour prédiction
-user_data = np.array([[age, fare, sex, embarked, pclass]])
+st.write("Merci d'avoir consulté ce projet ! Pour plus de détails, consultez mon portfolio GitHub pour le code complet et les analyses supplémentaires.")
 
-# Choisir le modèle
-if model_choice == "Régression Logistique":
-    model = logreg_model
-elif model_choice == "Forêt Aléatoire":
-    model = rf_model
-elif model_choice == "XGBoost":
-    model = xgb_model
-else:
-    model = knn_model
 
-# Bouton de prédiction
-if st.button("Prédire la survie"):
-    result = predict_survival(model, user_data)
-    st.write(f"La prédiction est: {'Survivra' if result == 1 else 'Ne survivra pas'}")
 
 
