@@ -11,64 +11,82 @@ st.set_page_config(page_title="Projet Titanic - Portfolio Data Analyst", layout=
 # Titre principal
 st.title("Analyse des Données des Passagers du Titanic")
 st.write("""
-Bienvenue dans ce projet d'analyse des données sur les passagers du Titanic. Ce projet explore les différents facteurs qui ont influencé la survie des passagers lors du naufrage tragique en 1912. 
-Nous allons parcourir différentes analyses statistiques et modélisations pour comprendre l'impact de variables comme l'âge, le sexe, la classe sociale, et la nationalité.
+Bienvenue dans cette analyse approfondie des données des passagers du Titanic. Ce projet se concentre sur l'exploration des facteurs ayant influencé les chances de survie lors du naufrage tragique du Titanic en 1912.
+Nous allons découvrir la composition des passagers en termes de sexe, d'âge, et de nationalité, ainsi que leurs chances de survie en fonction de ces facteurs. 
+Enfin, nous examinerons la performance de plusieurs modèles prédictifs visant à estimer les probabilités de survie.
 """)
 
 # Section Introduction
 st.header("Introduction")
 st.write("""
-Le naufrage du Titanic a causé la mort de plus de 1500 personnes. Ce projet analyse les données des passagers afin de comprendre quels facteurs ont influencé leurs chances de survie.
+Le naufrage du Titanic a été l'un des événements maritimes les plus tragiques de l'histoire, entraînant la mort de plus de 1500 personnes. Cette catastrophe a suscité de nombreuses questions sur les facteurs ayant influencé la survie des passagers. Ce projet s'efforce de répondre à certaines de ces questions en analysant les données des passagers.
 """)
 st.write("""
-Les résultats incluent des analyses statistiques et des modèles prédictifs, comme la régression logistique, Random Forest, XGBoost, et un classificateur Voting. Nous avons aussi utilisé le test du Chi² pour évaluer l'association entre certaines variables catégorielles et la survie.
+Les résultats de cette analyse mettent en lumière plusieurs facteurs clés tels que le sexe, l'âge, la classe sociale et la nationalité, et démontrent comment ces variables ont influencé les probabilités de survie des passagers.
 """)
 
 # Charger l'image du Titanic
 image = Image.open('images/photo_titanic.jpg') 
-
-# Afficher l'image dans l'application Streamlit
 st.image(image, caption='Le Titanic', use_column_width=True)
 
-# Section sur la distribution des données
-st.header("Analyse Exploratoire des Données")
-st.subheader("Distribution des variables")
+# Section sur la situation initiale des passagers
+st.header("Situation Initiale des Passagers")
 st.write("""
-L'analyse exploratoire a révélé plusieurs tendances intéressantes :
-- L'âge des passagers est concentré majoritairement entre 20 et 40 ans.
-- La majorité des passagers voyageaient en troisième classe.
-- Les hommes représentaient environ 75 % des passagers.
+Nous commençons par explorer la répartition des passagers selon trois variables cruciales : le sexe, l'âge et la nationalité. Ces éléments nous permettent de mieux comprendre la composition des passagers à bord avant la tragédie.
 """)
-
-# Affichage des graphiques de distribution
-st.subheader("Distribution des âges des passagers")
-image_ages = Image.open("images/4 Distribution des âges des passagers.png")
-st.image(image_ages, caption="Distribution des âges", use_column_width=True)
 
 st.subheader("Répartition des passagers par sexe")
 image_sexe = Image.open("images/5 Répartition des passagers par sexe.png")
 st.image(image_sexe, caption="Répartition des passagers par sexe", use_column_width=True)
-
-st.subheader("Répartition des passagers par classe")
-image_classe = Image.open("images/6 Répartition des passagers par classe.png")
-st.image(image_classe, caption="Répartition des passagers par classe", use_column_width=True)
-
-# Section sur les corrélations
-st.header("Corrélations des Variables")
 st.write("""
-Nous avons examiné les corrélations entre différentes variables pour mieux comprendre les facteurs influençant la survie des passagers. Le tarif du billet (fare) montre une corrélation positive avec la survie, tandis que le sexe et la classe sociale sont des facteurs clés.
+Environ 75 % des passagers étaient des hommes, tandis que les femmes représentaient une proportion plus faible. Cela aura un impact significatif sur les taux de survie, comme nous le verrons plus tard.
 """)
-image_correlation = Image.open("images/11 Matrice de corrélation des variables numériques.png")
-st.image(image_correlation, caption="Matrice de corrélation des variables numériques", use_column_width=True)
+
+st.subheader("Répartition des passagers par nationalité")
+image_nationalite = Image.open("images/15 Répartition des passagers par nationalité (Top 10).png")
+st.image(image_nationalite, caption="Répartition des passagers par nationalité (Top 10)", use_column_width=True)
+st.write("""
+La majorité des passagers à bord provenaient d'Angleterre, suivis par des passagers des États-Unis et d'Irlande. Cela reflète la diversité des passagers à bord du Titanic, ainsi que la répartition géographique des voyageurs transatlantiques à cette époque.
+""")
+
+st.subheader("Distribution des âges des passagers")
+image_ages = Image.open("images/4 Distribution des âges des passagers.png")
+st.image(image_ages, caption="Distribution des âges des passagers", use_column_width=True)
+st.write("""
+La plupart des passagers avaient entre 20 et 40 ans, avec une forte concentration de jeunes adultes. Il est important de noter que cette tranche d'âge était probablement plus active lors de l'évacuation, ce qui pourrait avoir eu un impact sur les taux de survie.
+""")
+
+# Section sur les survivants
+st.header("Caractéristiques des Survivants")
+st.write("""
+Examinons à présent la composition des survivants, toujours selon les mêmes variables. Nous allons observer comment ces facteurs ont influencé les chances de survie.
+""")
+
+st.subheader("Taux de survie par sexe")
+image_survie_sexe = Image.open("images/7 Taux de survie par sexe.png")
+st.image(image_survie_sexe, caption="Taux de survie par sexe", use_column_width=True)
+st.write("""
+Les femmes avaient un taux de survie beaucoup plus élevé (environ 75 %) comparé aux hommes (environ 20 %). Cela s'explique en grande partie par la règle "les femmes et les enfants d'abord" qui a guidé les efforts d'évacuation.
+""")
+
+st.subheader("Taux de survie par nationalité")
+image_survie_nationalite = Image.open("images/12 Taux de survie par nationalité.png")
+st.image(image_survie_nationalite, caption="Taux de survie par nationalité", use_column_width=True)
+st.write("""
+Les passagers d'origine japonaise et chinoise ont présenté un taux de survie élevé, tandis que ceux originaires de pays comme le Danemark et l'Italie ont eu des taux de survie beaucoup plus bas. Ces différences peuvent être attribuées à divers facteurs sociaux et structurels à bord du Titanic.
+""")
+
+st.subheader("Distribution de l'âge des survivants par sexe")
+image_ages_survie = Image.open("images/10 Distribution de l'âge par sexe et survie.png")
+st.image(image_ages_survie, caption="Distribution de l'âge des survivants par sexe", use_column_width=True)
+st.write("""
+La survie des jeunes passagers, en particulier des enfants, était significativement plus élevée, en particulier pour les filles. Les hommes âgés, quant à eux, avaient les taux de survie les plus bas.
+""")
 
 # Section sur les modèles prédictifs
 st.header("Modélisation et Prédiction")
 st.write("""
-Plusieurs modèles ont été testés pour prédire la survie des passagers. Voici les résultats des principaux modèles :
-- Régression Logistique
-- Random Forest
-- XGBoost
-- Classificateur de Vote
+Nous avons utilisé plusieurs modèles pour prédire la survie des passagers, notamment la régression logistique, Random Forest et XGBoost. Voici un aperçu des performances de ces modèles, avec les courbes ROC correspondantes.
 """)
 
 # Affichage des résultats des modèles
@@ -88,7 +106,7 @@ with col3:
 # Section sur l'importance des variables
 st.header("Importance des Variables")
 st.write("""
-Le modèle Random Forest a permis d'identifier les variables les plus importantes dans la prédiction de la survie des passagers. Le sexe, l'âge et le tarif du billet sont les trois variables les plus influentes.
+Le modèle Random Forest a identifié les variables les plus influentes dans la prédiction de la survie. Le sexe (en particulier le fait d'être un homme), l'âge et le tarif du billet étaient des facteurs déterminants dans les probabilités de survie.
 """)
 image_importance = Image.open("images/25 Importance des 10 principales variables selon Random Forest.png")
 st.image(image_importance, caption="Importance des variables selon Random Forest", use_column_width=True)
@@ -96,16 +114,23 @@ st.image(image_importance, caption="Importance des variables selon Random Forest
 # Section Conclusion
 st.header("Conclusion")
 st.write("""
-L'analyse approfondie des données des passagers du Titanic révèle que plusieurs facteurs ont influencé la survie :
-- Les femmes et les enfants avaient de meilleures chances de survie.
-- Les passagers de première classe avaient un avantage significatif.
-- La nationalité et la langue parlée à bord ont également joué un rôle non négligeable.
-""")
-st.write("""
-Les modèles prédictifs comme Random Forest et XGBoost ont montré des performances solides avec des AUC proches de 0,80. Ces résultats mettent en évidence l'importance de comprendre les interactions entre différentes variables lors de l'analyse de la survie dans de telles tragédies.
+L'analyse des données des passagers du Titanic met en lumière des différences frappantes dans les chances de survie selon le sexe, la classe sociale et la nationalité. Les femmes et les enfants, ainsi que les passagers des premières classes, avaient de bien meilleures chances de survie.
 """)
 
-st.write("Merci d'avoir consulté ce projet ! Pour plus de détails, consultez mon portfolio GitHub pour le code complet et les analyses supplémentaires.")
+st.write("""
+Les modèles prédictifs, tels que Random Forest et XGBoost, ont démontré des performances solides, atteignant des scores AUC proches de 0.80. Ces modèles confirment l'importance des variables démographiques et socio-économiques dans la prédiction des chances de survie.
+""")
+
+st.write("""
+Cette analyse a permis de souligner non seulement des facteurs évidents comme le sexe et la classe, mais aussi des variables moins discutées, telles que la nationalité. L'influence de la langue parlée à bord et des réseaux sociaux à bord a probablement joué un rôle dans les taux de survie.
+""")
+
+st.write("""
+En conclusion, les données montrent que les inégalités présentes à bord du Titanic ont fortement influencé les chances de survie. Ces résultats mettent en lumière des dynamiques sociales et structurelles encore pertinentes dans les analyses modernes de catastrophes similaires.
+""")
+
+st.write("Merci d'avoir consulté ce projet ! Pour plus de détails, n'hésitez pas à explorer le code complet et les analyses supplémentaires sur mon portfolio GitHub.")
+
 
 
 
