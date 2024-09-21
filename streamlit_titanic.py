@@ -115,8 +115,13 @@ st.image(image_importance, use_column_width=False, width=600)
 # Section Conclusion
 st.header("Conclusion")
 st.write("""
-Cette analyse approfondie montre que des facteurs tels que le sexe, l'âge, et la classe sociale ont eu une influence importante sur la survie. Cependant, la **nationalité** se révèle également être une variable intrigante, notamment pour les passagers issus des régions périphériques de l'Empire Britannique, comme l'Irlande ou les colonies asiatiques. Le contexte de l'époque, avec une forte présence de passVoici la version finale améliorée de ton code **Streamlit**, avec l'ajout du paragraphe expliquant l'impact de la langue maternelle des passagers et la barrière linguistique lors de l'évacuation. Les commentaires sont également ajustés pour refléter le thème de la **nationalité** dans l'analyse de la survie.
+Cette analyse approfondie montre que des facteurs tels que le sexe, l'âge, et la classe sociale ont eu une influence importante sur la survie. Cependant, la **nationalité** se révèle également être une variable intrigante, notamment pour les passagers issus des régions périphériques de l'Empire Britannique, comme l'Irlande ou les colonies asiatiques. Le contexte de l'époque, avec une forte présence de passagers britanniques de diverses origines culturelles, a sans doute influencé ces résultats.
+""")
+st.write("""
+En conclusion, l’analyse des données du Titanic révèle des inégalités frappantes dans les chances de survie, mais elle montre également que des facteurs culturels et géographiques, tels que la nationalité, peuvent aussi avoir influencé ces résultats de manière subtile.
+""")
 
+st.write("Merci d'avoir consulté ce projet ! Pour plus de détails et d'analyses supplémentaires, vous pouvez visiter mon portfolio GitHub.")
 
 
 
