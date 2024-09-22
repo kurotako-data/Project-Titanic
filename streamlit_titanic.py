@@ -19,6 +19,9 @@ if page == "Introduction":
     st.write("""
     Dans cette analyse, nous explorons en profondeur les facteurs ayant influencé les chances de survie des passagers du Titanic. En plus du sexe, de l'âge et de la classe sociale, nous nous penchons sur une autre variable intrigante : la nationalité, utilisée en l'absence de la variable langue dans le fichier. À travers cette étude, nous tenterons de répondre à la question : la nationalité a-t-elle joué un rôle dans les chances de survie dans le cadre du processus de compréhension des consignes d'évacuation?
     """)
+    st.write("""
+    Le Titanic transportait une variété de passagers d’origines diverses, et cette diversité se reflète dans les données que nous analysons ici. Bien que beaucoup soient classés comme "britanniques", cela inclut des passagers issus des colonies et territoires de l'Empire Britannique, tels que l'Irlande, le Canada, et même des régions plus lointaines comme l'Australie. Cette classification complexe influence notre analyse de la survie selon la nationalité, en plus des facteurs plus classiques comme le sexe et la classe.
+    """)
     # Charger l'image du Titanic
     image = Image.open('images/photo_titanic.jpg') 
     st.image(image, caption='Le Titanic', use_column_width=True)
