@@ -88,22 +88,77 @@ elif page == "Survivants":
 elif page == "Modélisation":
     st.header("Modélisation et Prédiction")
     st.write("""
-    Afin de comprendre comment ces variables ont influencé les chances de survie, nous avons utilisé des modèles prédictifs tels que **Random Forest** et **XGBoost**. Ces modèles nous permettent d'analyser l'importance relative des différentes variables sur les probabilités de survie.
+    Afin de mieux comprendre quels facteurs ont influencé les chances de survie des passagers du Titanic, nous avons utilisé plusieurs modèles de classification : **Random Forest**, **XGBoost**, et un **Voting Classifier** (combinaison de plusieurs modèles).
+    
+    Ces modèles nous permettent d’évaluer l’importance des variables telles que le sexe, l’âge, la classe sociale, et la nationalité, et de prédire les probabilités de survie en fonction de ces facteurs. L’objectif est de déterminer quelles caractéristiques ont le plus influencé les chances de survie, et d’évaluer la performance de chaque modèle en fonction de sa capacité à prédire correctement la survie.
     """)
 
-    # Affichage des résultats des modèles
-    st.subheader("Courbes ROC des différents modèles")
-    st.write("Voici les courbes ROC pour les modèles que nous avons utilisés pour prédire les chances de survie.")
+    # Explication des modèles utilisés
+    st.subheader("1. Modèles utilisés")
+    st.write("""
+    - **Random Forest** : Un ensemble d'arbres de décision qui améliore la précision de la prédiction en agrégeant les résultats de plusieurs arbres.
+    - **XGBoost** : Un modèle de gradient boosting qui optimise les prédictions en construisant successivement des modèles plus précis, en corrigeant les erreurs des modèles précédents.
+    - **Voting Classifier** : Une approche qui combine les prédictions de plusieurs modèles (dans notre cas, Random Forest, XGBoost et un modèle de régression logistique) pour améliorer la robustesse des résultats.
+    """)
+
+    # Affichage des courbes ROC
+    st.subheader("2. Courbes ROC des modèles")
+    st.write("""
+    Les courbes ROC nous permettent d'évaluer la performance des modèles de prédiction. Une courbe ROC montre la sensibilité (ou rappel) en fonction du taux de faux positifs. Plus la courbe se rapproche du coin supérieur gauche, meilleure est la performance du modèle. La surface sous la courbe (AUC) est un indicateur clé : plus l’AUC est élevé, meilleur est le modèle.
+    """)
+
     col1, col2, col3 = st.columns(3)
     with col1:
         image_roc_rf = Image.open("images/21 courbe ROC  RF.png")
         st.image(image_roc_rf, caption="ROC Random Forest", use_column_width=False, width=400)
+        st.write("""
+        **AUC** (Random Forest) : 0.86
+        Le modèle Random Forest montre de bonnes performances, avec un AUC de 0.86, indiquant qu’il discrimine bien entre les passagers survivants et ceux décédés. Il met particulièrement en avant le sexe (être une femme) comme variable clé pour prédire la survie.
+        """)
+
     with col2:
         image_roc_xgb = Image.open("images/22 courbe ROC  XGB.png")
         st.image(image_roc_xgb, caption="ROC XGBoost", use_column_width=False, width=400)
+        st.write("""
+        **AUC** (XGBoost) : 0.88
+        Le modèle XGBoost surpasse légèrement le Random Forest avec un AUC de 0.88. Ce modèle permet de mieux capter les interactions complexes entre les variables (par exemple, le fait d’être un homme jeune en première classe améliore les chances de survie).
+        """)
+
     with col3:
         image_roc_voting = Image.open("images/23 courbe ROC Voting classifier.png")
         st.image(image_roc_voting, caption="ROC Voting Classifier", use_column_width=False, width=400)
+        st.write("""
+        **AUC** (Voting Classifier) : 0.89
+        Le Voting Classifier, qui combine les résultats de plusieurs modèles, offre la meilleure performance avec un AUC de 0.89. Ce modèle profite des forces de chaque algorithme pour améliorer la robustesse des prédictions.
+        """)
+
+    # Analyse de l'importance des variables
+    st.subheader("3. Importance des Variables")
+    st.write("""
+    L’un des grands avantages du modèle **Random Forest** est qu’il permet d’identifier les variables qui ont le plus contribué à la prédiction de la survie. Voici les principales variables influentes :
+    
+    - **Sexe** : Être une femme augmente significativement les chances de survie, conformément à la règle "les femmes et les enfants d'abord".
+    - **Classe sociale** : Les passagers de première classe ont eu de bien meilleures chances de survie que ceux des classes inférieures.
+    - **Âge** : Les enfants ont eu de meilleures chances de survie, surtout ceux accompagnés de leurs parents.
+    - **Nationalité** : Bien que moins influente que le sexe ou la classe, la nationalité semble avoir joué un rôle pour certains groupes. Par exemple, les passagers des États-Unis et du Royaume-Uni ont eu des taux de survie plus élevés.
+    """)
+
+    # Affichage de l'image sur l'importance des variables
+    image_importance = Image.open("images/25 Importance des 10 principales variables selon Random Forest.png")
+    st.image(image_importance, use_column_width=False, width=600)
+    st.write("""
+    Le graphique ci-dessus montre que le **sexe**, l’**âge**, et la **classe** sont les trois variables les plus importantes pour prédire la survie. En revanche, la **nationalité** a eu un impact plus limité mais non négligeable.
+    """)
+
+    # Résumé de la modélisation
+    st.subheader("4. Résumé et Conclusions de la Modélisation")
+    st.write("""
+    En résumé, nos modèles montrent que les variables liées au **sexe**, à l'**âge**, et à la **classe** ont été les plus déterminantes dans la survie des passagers du Titanic. Le fait d’être une femme en première classe, ou un enfant, a nettement amélioré les chances de survie.
+    
+    La **nationalité**, bien qu’elle ait un impact plus subtil, a influencé les résultats. Les passagers provenant de pays anglophones, tels que le Royaume-Uni et les États-Unis, semblent avoir mieux compris les consignes d’évacuation, ce qui a pu jouer en leur faveur. Cependant, d’autres facteurs comme la richesse et les connexions sociales ont probablement aussi contribué à cet effet.
+    
+    Nos modèles, notamment le **Voting Classifier**, offrent des prédictions robustes avec un AUC proche de 0.89, ce qui montre une bonne capacité à discriminer les survivants des autres passagers.
+    """)
 
 elif page == "Conclusion":
     st.header("Conclusion")
