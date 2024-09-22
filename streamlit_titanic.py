@@ -43,11 +43,11 @@ elif page == "Situation Initiale":
     image_nationalite = Image.open("images/15 Répartition des passagers par nationalité (Top 10).png")
     st.image(image_nationalite, use_column_width=False, width=600)
     st.write("""
-    Les nationalités dominantes étaient principalement l'**Angleterre**, les **États-Unis**, et l'**Irlande**. Cependant, en tenant compte du contexte de l'époque, beaucoup de passagers "britanniques" provenaient de différentes régions de l'Empire Britannique, comme l'**Australie**, le **Canada** et d'autres colonies. En analysant ces données, nous comprenons que ces passagers avaient des cultures et origines variées, ce qui pourrait avoir influencé leur expérience à bord et leurs chances de survie.
+    Les nationalités dominantes étaient principalement l'**Angleterre**, les **États-Unis**, et l'**Irlande**. Cependant, en tenant compte du contexte de l'époque, beaucoup de passagers "britanniques" provenaient de différentes régions de l'Empire Britannique, comme l'**Australie**, le **Canada** et d'autres colonies tout comme de pays n'appartenant pas à l'Empire. En analysant ces données, nous comprenons que ces passagers avaient des cultures et origines variées, ce qui pourrait avoir influencé leur expérience à bord et leurs chances de survie.
     """)
 
     st.write("""
-    Il est important de noter que le Titanic, étant un navire britannique, les instructions d’évacuation ont forcément été communiquées en anglais. À cette époque, la maîtrise de l’anglais n’était pas aussi répandue qu’aujourd’hui, surtout parmi les passagers issus de pays non anglophones. Cela pourrait avoir impacté leur capacité à comprendre rapidement les directives en situation de crise. Les passagers dont la langue maternelle n’était pas l’anglais ont peut-être été désavantagés lors de l’évacuation. Ce facteur, bien que difficile à quantifier, est crucial pour mieux comprendre les disparités de survie selon la nationalité.
+    Il est important de noter que le Titanic, étant un navire britannique, les instructions d’évacuation ont forcément été communiquées en anglais. À cette époque, la maîtrise de l’anglais n’était pas aussi répandue qu’aujourd’hui, surtout parmi les passagers issus de pays non anglophones. Cela pourrait avoir impacté leur capacité à comprendre rapidement les directives en situation de crise. Les passagers dont la langue maternelle n’était pas l’anglais (Les Suédois ou les Japonais, présent à bord par exemple) ont peut-être été désavantagés lors de l’évacuation. Ce facteur, bien que difficile à quantifier, est crucial pour mieux comprendre les disparités de survie selon la nationalité.
     """)
 
     st.subheader("Distribution des âges des passagers")
