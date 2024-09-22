@@ -17,7 +17,7 @@ page = st.sidebar.radio("Accéder à", ["Introduction", "Situation Initiale", "S
 if page == "Introduction":
     st.title("Titanic, la survie selon le sexe, l'âge, la classe ... et les facteurs langues/nationalité ?")
     st.write("""
-    Dans cette analyse, nous explorons en profondeur les facteurs ayant influencé les chances de survie des passagers du Titanic. En plus du sexe, de l'âge et de la classe sociale, nous nous penchons sur une autre variable intrigante : la nationalité. À travers cette étude, nous tenterons de répondre à la question : la nationalité a-t-elle joué un rôle dans les chances de survie ?
+    Dans cette analyse, nous explorons en profondeur les facteurs ayant influencé les chances de survie des passagers du Titanic. En plus du sexe, de l'âge et de la classe sociale, nous nous penchons sur une autre variable intrigante : la nationalité, utilisée en l'absence de la variable langue dans le fichier. À travers cette étude, nous tenterons de répondre à la question : la nationalité a-t-elle joué un rôle dans les chances de survie dans le cadre du processus de compréhension des consignes d'évacuation?
     """)
     # Charger l'image du Titanic
     image = Image.open('images/photo_titanic.jpg') 
