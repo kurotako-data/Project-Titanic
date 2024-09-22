@@ -7,6 +7,66 @@ from PIL import Image
 
 # Configuration de la page
 st.set_page_config(page_title="Projet Titanic - Portfolio Data Analyst", layout="wide")
+###
+# Menu de navigation dans la barre latérale
+st.sidebar.title("Navigation")
+page = st.sidebar.radio("Accéder à", ["Introduction", "Situation Initiale", "Survivants", "Modélisation", "Conclusion"])
+
+# Affichage du contenu en fonction de la sélection dans le menu
+if page == "Introduction":
+    st.title("Titanic, la survie selon le sexe, l'âge, la classe ... et pourquoi pas, la nationalité ?")
+    st.write("""
+    Dans cette analyse, nous explorons en profondeur les facteurs ayant influencé les chances de survie des passagers du Titanic. En plus du sexe, de l'âge et de la classe sociale, nous nous penchons sur une autre variable intrigante : la nationalité. À travers cette étude, nous tenterons de répondre à la question : la nationalité a-t-elle joué un rôle dans les chances de survie ?
+    """)
+    # Charger l'image du Titanic
+    image = Image.open('images/photo_titanic.jpg') 
+    st.image(image, caption='Le Titanic', use_column_width=True)
+
+elif page == "Situation Initiale":
+    st.header("Situation Initiale des Passagers")
+    st.write("""
+    Commençons par explorer la situation initiale des passagers à bord du Titanic, en examinant leur sexe, leur âge, leur classe sociale, ainsi que leur nationalité. Ces variables sont cruciales pour comprendre les inégalités qui ont influencé la survie.
+    """)
+    # Répartition par sexe
+    st.subheader("Répartition des passagers par sexe")
+    image_sexe = Image.open("images/5 Répartition des passagers par sexe.png")
+    st.image(image_sexe, use_column_width=False, width=600)
+    st.write("""
+    La majorité des passagers étaient des hommes, représentant environ 75 %. Ce déséquilibre entre les sexes soulève la question suivante : comment cela a-t-il influencé les chances de survie, surtout face à la règle "les femmes et les enfants d'abord" ?
+    """)
+    # Répartition par nationalité
+    st.subheader("Répartition des passagers par nationalité")
+    image_nationalite = Image.open("images/15 Répartition des passagers par nationalité (Top 10).png")
+    st.image(image_nationalite, use_column_width=False, width=600)
+    st.write("""
+    Les nationalités dominantes étaient principalement l'**Angleterre**, les **États-Unis**, et l'**Irlande**. Cependant, en tenant compte du contexte de l'époque...
+    """)
+
+elif page == "Survivants":
+    st.header("Caractéristiques des Survivants")
+    # Ajoute ici les sections sur les survivants
+    # Comme le taux de survie par sexe, nationalité, etc.
+
+elif page == "Modélisation":
+    st.header("Modélisation et Prédiction")
+    # Affiche ici les résultats des modèles prédictifs
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        image_roc_rf = Image.open("images/21 courbe ROC  RF.png")
+        st.image(image_roc_rf, caption="ROC Random Forest", use_column_width=False, width=400)
+    with col2:
+        image_roc_xgb = Image.open("images/22 courbe ROC  XGB.png")
+        st.image(image_roc_xgb, caption="ROC XGBoost", use_column_width=False, width=400)
+    with col3:
+        image_roc_voting = Image.open("images/23 courbe ROC Voting classifier.png")
+        st.image(image_roc_voting, caption="ROC Voting Classifier", use_column_width=False, width=400)
+
+elif page == "Conclusion":
+    st.header("Conclusion")
+    st.write("""
+    Cette analyse approfondie montre que des facteurs tels que le sexe, l'âge, et la classe sociale ont eu une influence importante sur la survie. Cependant, la **nationalité** se révèle également être une variable intrigante...
+    """)
+####
 
 # Titre principal
 st.title("Titanic, la survie selon le sexe, l'âge, la classe ... et pourquoi pas, la nationalité ?")
