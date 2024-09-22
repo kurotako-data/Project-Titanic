@@ -15,7 +15,7 @@ page = st.sidebar.radio("Accéder à", ["Introduction", "Situation Initiale", "S
 
 # Affichage du contenu en fonction de la sélection dans le menu
 if page == "Introduction":
-    st.title("Titanic, la survie selon le sexe, l'âge, la classe ... et pourquoi pas, la nationalité ?")
+    st.title("Titanic, la survie selon le sexe, l'âge, la classe ... et les facteurs langues/nationalité ?")
     st.write("""
     Dans cette analyse, nous explorons en profondeur les facteurs ayant influencé les chances de survie des passagers du Titanic. En plus du sexe, de l'âge et de la classe sociale, nous nous penchons sur une autre variable intrigante : la nationalité. À travers cette étude, nous tenterons de répondre à la question : la nationalité a-t-elle joué un rôle dans les chances de survie ?
     """)
